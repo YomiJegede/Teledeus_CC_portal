@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import CallHistory from './components/CallHistory';
 import { 
   Search, 
   FileText, 
@@ -14,6 +15,7 @@ import {
 function App() {
   const [msisdn, setMsisdn] = useState('234707XXXXXXX');
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [currentPage, setCurrentPage] = useState<'home' | 'call-history'>('home');
 
   const handleSearch = () => {
     // Search functionality would be implemented here
@@ -25,6 +27,18 @@ function App() {
       handleSearch();
     }
   };
+
+  const handleCallHistoryClick = () => {
+    setCurrentPage('call-history');
+  };
+
+  const handleBackToHome = () => {
+    setCurrentPage('home');
+  };
+
+  if (currentPage === 'call-history') {
+    return <CallHistory onBack={handleBackToHome} />;
+  }
 
   const serviceCards = [
     {
@@ -60,7 +74,8 @@ function App() {
       title: 'Call History',
       description: 'View Pay4Me logs',
       color: 'bg-emerald-50 text-emerald-600',
-      hoverColor: 'hover:bg-emerald-100'
+      hoverColor: 'hover:bg-emerald-100',
+      onClick: handleCallHistoryClick
     },
     {
       icon: CheckCircle,
@@ -159,6 +174,7 @@ function App() {
             return (
               <div
                 key={index}
+                onClick={card.onClick}
                 className={`bg-white rounded-xl shadow-sm border border-gray-200 p-6 cursor-pointer transition-all duration-300 hover:shadow-md hover:-translate-y-1 ${card.hoverColor} group`}
               >
                 <div className="flex flex-col items-center text-center space-y-4">
