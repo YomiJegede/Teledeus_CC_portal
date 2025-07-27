@@ -88,22 +88,22 @@ const ResetPin: React.FC<ResetPinProps> = ({ onBack }) => {
           <div className="p-6">
             <h3 className="text-sm font-semibold text-gray-700 mb-6 flex items-center">
               <Shield className="w-4 h-4 mr-2 text-indigo-500" />
-              Services
+              
             </h3>
             <ul className="space-y-3">
               <li>
                 <button className="w-full text-left px-4 py-3 text-sm text-gray-600 hover:bg-indigo-50 hover:text-indigo-600 rounded-lg transition-all duration-200 hover:scale-105">
-                  Opt in/out
+                  
                 </button>
               </li>
               <li>
                 <button className="w-full text-left px-4 py-3 text-sm text-gray-600 hover:bg-indigo-50 hover:text-indigo-600 rounded-lg transition-all duration-200 hover:scale-105">
-                  Roaming status
+                  
                 </button>
               </li>
               <li>
                 <button className="w-full text-left px-4 py-3 text-sm text-gray-600 hover:bg-indigo-50 hover:text-indigo-600 rounded-lg transition-all duration-200 hover:scale-105">
-                  Logout
+                  
                 </button>
               </li>
             </ul>
