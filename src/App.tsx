@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import CallHistory from './components/CallHistory';
+import BeneficiaryLists from './components/BeneficiaryLists';
 import { 
   Search, 
   FileText, 
@@ -15,7 +16,7 @@ import {
 function App() {
   const [msisdn, setMsisdn] = useState('234707XXXXXXX');
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const [currentPage, setCurrentPage] = useState<'home' | 'call-history'>('home');
+  const [currentPage, setCurrentPage] = useState<'home' | 'call-history' | 'beneficiary-lists'>('home');
 
   const handleSearch = () => {
     // Search functionality would be implemented here
@@ -32,6 +33,10 @@ function App() {
     setCurrentPage('call-history');
   };
 
+  const handleBeneficiaryListsClick = () => {
+    setCurrentPage('beneficiary-lists');
+  };
+
   const handleBackToHome = () => {
     setCurrentPage('home');
   };
@@ -40,13 +45,18 @@ function App() {
     return <CallHistory onBack={handleBackToHome} />;
   }
 
+  if (currentPage === 'beneficiary-lists') {
+    return <BeneficiaryLists onBack={handleBackToHome} />;
+  }
+
   const serviceCards = [
     {
       icon: FileText,
       title: 'Beneficiary Lists',
       description: 'View white/blacklist entries',
       color: 'bg-blue-50 text-blue-600',
-      hoverColor: 'hover:bg-blue-100'
+      hoverColor: 'hover:bg-blue-100',
+      onClick: handleBeneficiaryListsClick
     },
     {
       icon: Lock,
