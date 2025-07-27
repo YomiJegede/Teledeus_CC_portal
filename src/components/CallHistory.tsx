@@ -94,21 +94,21 @@ const CallHistory: React.FC<CallHistoryProps> = ({ onBack }) => {
       <div className="flex">
         <div className="w-48 bg-gray-100 min-h-screen border-r border-gray-200">
           <div className="p-4">
-            <h3 className="text-sm font-semibold text-gray-700 mb-4">Services</h3>
+            <h3 className="text-sm font-semibold text-gray-700 mb-4"></h3>
             <ul className="space-y-2">
               <li>
                 <button className="w-full text-left px-3 py-2 text-sm text-gray-600 hover:bg-gray-200 rounded">
-                  Opt in/out
+                  
                 </button>
               </li>
               <li>
                 <button className="w-full text-left px-3 py-2 text-sm text-gray-600 hover:bg-gray-200 rounded">
-                  Roaming status
+                  
                 </button>
               </li>
               <li>
                 <button className="w-full text-left px-3 py-2 text-sm text-gray-600 hover:bg-gray-200 rounded">
-                  Logout
+                  
                 </button>
               </li>
             </ul>
