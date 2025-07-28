@@ -6,10 +6,7 @@ interface ResetPinProps {
 }
 
 const ResetPin: React.FC<ResetPinProps> = ({ onBack }) => {
-  const [newPin, setNewPin] = useState('');
-  const [confirmPin, setConfirmPin] = useState('');
-  const [showPin, setShowPin] = useState(false);
-  const [showConfirmPin, setShowConfirmPin] = useState(false);
+  const [generatedPin, setGeneratedPin] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [success, setSuccess] = useState(false);
   const [error, setError] = useState('');
@@ -18,25 +15,14 @@ const ResetPin: React.FC<ResetPinProps> = ({ onBack }) => {
 
   const generateRandomPin = () => {
     const pin = Math.floor(1000 + Math.random() * 9000).toString();
-    setNewPin(pin);
-    setConfirmPin(pin);
+    setGeneratedPin(pin);
   };
 
-  const handleSave = async () => {
+  const handleSendPin = async () => {
     setError('');
     
-    if (!newPin || newPin.length !== 4) {
-      setError('PIN must be exactly 4 digits');
-      return;
-    }
-
-    if (newPin !== confirmPin) {
-      setError('PINs do not match');
-      return;
-    }
-
-    if (!/^\d{4}$/.test(newPin)) {
-      setError('PIN must contain only numbers');
+    if (!generatedPin) {
+      setError('Please generate a PIN first');
       return;
     }
 
@@ -47,13 +33,12 @@ const ResetPin: React.FC<ResetPinProps> = ({ onBack }) => {
       await new Promise(resolve => setTimeout(resolve, 2000));
       
       // Simulate SMS sending
-      console.log(`Sending new PIN ${newPin} to ${phoneNumber}`);
+      console.log(`Sending new PIN ${generatedPin} to ${phoneNumber}`);
       
       setSuccess(true);
       setTimeout(() => {
         setSuccess(false);
-        setNewPin('');
-        setConfirmPin('');
+        setGeneratedPin('');
       }, 3000);
     } catch (err) {
       setError('Failed to update PIN. Please try again.');
@@ -61,9 +46,6 @@ const ResetPin: React.FC<ResetPinProps> = ({ onBack }) => {
       setIsLoading(false);
     }
   };
-
-  const isValidPin = newPin.length === 4 && /^\d{4}$/.test(newPin);
-  const pinsMatch = newPin === confirmPin && confirmPin.length > 0;
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-indigo-50 via-purple-50 to-pink-50">
@@ -128,9 +110,9 @@ const ResetPin: React.FC<ResetPinProps> = ({ onBack }) => {
               <div className="px-8 py-6 bg-gradient-to-r from-indigo-500 to-purple-600 text-white">
                 <h2 className="text-xl font-semibold flex items-center">
                   <Smartphone className="w-6 h-6 mr-2" />
-                  PIN will be sent to your mobile
+                  Generate New PIN
                 </h2>
-                <p className="text-indigo-100 mt-1">Enter a new 4-digit PIN below</p>
+                <p className="text-indigo-100 mt-1">A new 4-digit PIN will be generated and sent to {phoneNumber}</p>
               </div>
 
               {/* Card Content */}
@@ -154,79 +136,92 @@ const ResetPin: React.FC<ResetPinProps> = ({ onBack }) => {
                   </div>
                 )}
 
-                {/* New PIN Input */}
-                <div className="space-y-2">
-                  <label className="block text-sm font-semibold text-gray-700">
-                    New PIN
-                  </label>
-                  <div className="relative">
-                    <input
-                      type={showPin ? 'text' : 'password'}
-                      value={newPin}
-                      onChange={(e) => setNewPin(e.target.value.slice(0, 4))}
-                      className="w-full px-4 py-4 border-2 border-gray-300 rounded-xl focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all duration-200 bg-white/50 backdrop-blur-sm text-lg font-mono text-center tracking-widest"
-                      placeholder="••••"
-                      maxLength={4}
-                    />
-                    <button
-                      type="button"
-                      onClick={() => setShowPin(!showPin)}
-                      className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600 transition-colors"
-                    >
-                      {showPin ? <EyeOff size={20} /> : <Eye size={20} />}
-                    </button>
+                {/* Generated PIN Display */}
+                {generatedPin && (
+                  <div className="bg-indigo-50 border border-indigo-200 rounded-xl p-6">
+                    <h3 className="text-lg font-semibold text-indigo-900 mb-3 flex items-center">
+                      <Lock className="w-5 h-5 mr-2" />
+                      Generated PIN
+                    </h3>
+                    <div className="bg-white rounded-lg p-4 text-center">
+                      <span className="text-3xl font-mono font-bold text-indigo-600 tracking-widest">
+                        {generatedPin}
+                      </span>
+                    </div>
+                    <p className="text-sm text-indigo-700 mt-3 text-center">
+                      This PIN will be sent to {phoneNumber}
+                    </p>
                   </div>
-                  <div className="flex items-center space-x-2">
-                    <div className={`w-2 h-2 rounded-full transition-colors ${isValidPin ? 'bg-green-500' : 'bg-gray-300'}`}></div>
-                    <span className={`text-xs ${isValidPin ? 'text-green-600' : 'text-gray-500'}`}>
-                      4 digits required
-                    </span>
-                  </div>
-                </div>
+                )}
 
-                {/* Confirm PIN Input */}
-                <div className="space-y-2">
-                  <label className="block text-sm font-semibold text-gray-700">
-                    Confirm PIN
-                  </label>
-                  <div className="relative">
-                    <input
-                      type={showConfirmPin ? 'text' : 'password'}
-                      value={confirmPin}
-                      onChange={(e) => setConfirmPin(e.target.value.slice(0, 4))}
-                      className="w-full px-4 py-4 border-2 border-gray-300 rounded-xl focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all duration-200 bg-white/50 backdrop-blur-sm text-lg font-mono text-center tracking-widest"
-                      placeholder="••••"
-                      maxLength={4}
-                    />
-                    <button
-                      type="button"
-                      onClick={() => setShowConfirmPin(!showConfirmPin)}
-                      className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600 transition-colors"
-                    >
-                      {showConfirmPin ? <EyeOff size={20} /> : <Eye size={20} />}
-                    </button>
-                  </div>
-                  <div className="flex items-center space-x-2">
-                    <div className={`w-2 h-2 rounded-full transition-colors ${pinsMatch ? 'bg-green-500' : 'bg-gray-300'}`}></div>
-                    <span className={`text-xs ${pinsMatch ? 'text-green-600' : 'text-gray-500'}`}>
-                      PINs must match
-                    </span>
-                  </div>
-                </div>
-
-                {/* Generate Random PIN */}
-                <div className="bg-gray-50 rounded-xl p-4">
-                  <p className="text-sm text-gray-600 mb-3">Need a secure PIN?</p>
+                {/* Generate PIN Section */}
+                <div className="bg-gradient-to-r from-blue-50 to-indigo-50 rounded-xl p-6 border border-blue-200">
+                  <h3 className="text-lg font-semibold text-gray-900 mb-3 flex items-center">
+                    <Shield className="w-5 h-5 mr-2 text-blue-500" />
+                    PIN Generation
+                  </h3>
+                  <p className="text-gray-600 mb-4">
+                    Click the button below to generate a secure 4-digit PIN that will be sent to your mobile phone.
+                  </p>
                   <button
                     onClick={generateRandomPin}
-                    className="bg-gray-600 hover:bg-gray-700 text-white px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200 hover:scale-105"
+                    className="w-full bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-xl font-semibold transition-all duration-200 hover:scale-105 flex items-center justify-center space-x-2"
                   >
-                    Generate Random PIN
+                    <Shield size={20} />
+                    <span>Generate New PIN</span>
                   </button>
                 </div>
 
-                {/* Action Buttons */}
-                <div className="flex space-x-4 pt-4">
+                {/* Send PIN Button */}
+                {generatedPin && (
+                  <div className="pt-4">
+                    <button
+                      onClick={handleSendPin}
+                      disabled={isLoading}
+                      className="w-full bg-gradient-to-r from-indigo-500 to-purple-600 hover:from-indigo-600 hover:to-purple-700 disabled:from-gray-300 disabled:to-gray-400 text-white px-6 py-4 rounded-xl font-semibold transition-all duration-200 hover:scale-105 disabled:scale-100 disabled:cursor-not-allowed flex items-center justify-center space-x-2"
+                    >
+                      {isLoading ? (
+                        <>
+                          <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+                          <span>Sending PIN...</span>
+                        </>
+                      ) : (
+                        <>
+                          <Smartphone size={20} />
+                          <span>Send PIN to Mobile</span>
+                        </>
+                      )}
+                    </button>
+                  </div>
+                )}
+
+                {/* Info Box */}
+                <div className="bg-blue-50 border border-blue-200 rounded-xl p-4 flex items-start space-x-3">
+                  <Shield className="w-5 h-5 text-blue-500 mt-0.5" />
+                  <div className="text-sm">
+                    <p className="text-blue-800 font-medium">Security Notice</p>
+                    <p className="text-blue-600 mt-1">
+                      Your new PIN will be automatically generated and sent via SMS to {phoneNumber}. Keep it secure and don't share it with anyone.
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Teledeus Logo */}
+          <div className="fixed bottom-6 right-6">
+            <div className="bg-gradient-to-r from-purple-600 to-indigo-600 text-white px-4 py-2 rounded-xl text-sm font-bold shadow-lg hover:shadow-xl transition-all duration-200 hover:scale-105">
+              Teledeus
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default ResetPin;
                   <button
                     onClick={handleSave}
                     disabled={!isValidPin || !pinsMatch || isLoading}
