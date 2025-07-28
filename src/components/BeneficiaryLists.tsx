@@ -148,10 +148,6 @@ const BeneficiaryLists: React.FC<BeneficiaryListsProps> = ({ onBack }) => {
                   />
                 </div>
                 <div className="flex space-x-3">
-                  <button className="flex items-center space-x-2 px-4 py-3 bg-blue-500 hover:bg-blue-600 text-white rounded-xl font-medium transition-all duration-200 hover:scale-105 shadow-lg hover:shadow-xl">
-                    <Plus size={18} />
-                    <span>Add Entry</span>
-                  </button>
                   <button className="flex items-center space-x-2 px-4 py-3 bg-gray-100 hover:bg-gray-200 text-gray-700 rounded-xl font-medium transition-all duration-200 hover:scale-105">
                     <Filter size={18} />
                     <span>Filter</span>
