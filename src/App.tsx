@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import CallHistory from './components/CallHistory';
 import BeneficiaryLists from './components/BeneficiaryLists';
 import ProfileInfo from './components/ProfileInfo';
+import OptInOut from './components/OptInOut';
 import { 
   Search, 
   FileText, 
@@ -16,7 +17,7 @@ import {
 function App() {
   const [msisdn, setMsisdn] = useState('234707XXXXXXX');
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const [currentPage, setCurrentPage] = useState<'home' | 'call-history' | 'beneficiary-lists' | 'profile-info'>('home');
+  const [currentPage, setCurrentPage] = useState<'home' | 'call-history' | 'beneficiary-lists' | 'profile-info' | 'opt-in-out'>('home');
 
   const handleSearch = () => {
     // Search functionality would be implemented here
@@ -41,6 +42,10 @@ function App() {
     setCurrentPage('profile-info');
   };
 
+  const handleOptInOutClick = () => {
+    setCurrentPage('opt-in-out');
+  };
+
   const handleBackToHome = () => {
     setCurrentPage('home');
   };
@@ -55,6 +60,10 @@ function App() {
 
   if (currentPage === 'profile-info') {
     return <ProfileInfo onBack={handleBackToHome} />;
+  }
+
+  if (currentPage === 'opt-in-out') {
+    return <OptInOut onBack={handleBackToHome} />;
   }
 
   const serviceCards = [
@@ -94,7 +103,8 @@ function App() {
       title: 'Opt In/Out',
       description: 'Enable/Disable',
       color: 'bg-green-50 text-green-600',
-      hoverColor: 'hover:bg-green-100'
+      hoverColor: 'hover:bg-green-100',
+      onClick: handleOptInOutClick
     }
   ];
 
