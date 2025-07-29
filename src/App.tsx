@@ -1,11 +1,9 @@
 import React, { useState } from 'react';
 import CallHistory from './components/CallHistory';
 import BeneficiaryLists from './components/BeneficiaryLists';
-import ResetPin from './components/ResetPin';
 import { 
   Search, 
   FileText, 
-  Lock, 
   User, 
   Wifi, 
   Phone, 
@@ -17,7 +15,7 @@ import {
 function App() {
   const [msisdn, setMsisdn] = useState('234707XXXXXXX');
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const [currentPage, setCurrentPage] = useState<'home' | 'call-history' | 'beneficiary-lists' | 'reset-pin'>('home');
+  const [currentPage, setCurrentPage] = useState<'home' | 'call-history' | 'beneficiary-lists'>('home');
 
   const handleSearch = () => {
     // Search functionality would be implemented here
@@ -38,9 +36,6 @@ function App() {
     setCurrentPage('beneficiary-lists');
   };
 
-  const handleResetPinClick = () => {
-    setCurrentPage('reset-pin');
-  };
 
   const handleBackToHome = () => {
     setCurrentPage('home');
@@ -54,9 +49,6 @@ function App() {
     return <BeneficiaryLists onBack={handleBackToHome} />;
   }
 
-  if (currentPage === 'reset-pin') {
-    return <ResetPin onBack={handleBackToHome} />;
-  }
 
   const serviceCards = [
     {
@@ -66,14 +58,6 @@ function App() {
       color: 'bg-blue-50 text-blue-600',
       hoverColor: 'hover:bg-blue-100',
       onClick: handleBeneficiaryListsClick
-    },
-    {
-      icon: Lock,
-      title: 'Reset PIN',
-      description: 'Change sponsor PIN',
-      color: 'bg-indigo-50 text-indigo-600',
-      hoverColor: 'hover:bg-indigo-100',
-      onClick: handleResetPinClick
     },
     {
       icon: User,
