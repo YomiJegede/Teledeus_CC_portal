@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import CallHistory from './components/CallHistory';
 import BeneficiaryLists from './components/BeneficiaryLists';
+import ProfileInfo from './components/ProfileInfo';
 import { 
   Search, 
   FileText, 
@@ -15,7 +16,7 @@ import {
 function App() {
   const [msisdn, setMsisdn] = useState('234707XXXXXXX');
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const [currentPage, setCurrentPage] = useState<'home' | 'call-history' | 'beneficiary-lists'>('home');
+  const [currentPage, setCurrentPage] = useState<'home' | 'call-history' | 'beneficiary-lists' | 'profile-info'>('home');
 
   const handleSearch = () => {
     // Search functionality would be implemented here
@@ -36,6 +37,9 @@ function App() {
     setCurrentPage('beneficiary-lists');
   };
 
+  const handleProfileInfoClick = () => {
+    setCurrentPage('profile-info');
+  };
 
   const handleBackToHome = () => {
     setCurrentPage('home');
@@ -49,6 +53,9 @@ function App() {
     return <BeneficiaryLists onBack={handleBackToHome} />;
   }
 
+  if (currentPage === 'profile-info') {
+    return <ProfileInfo onBack={handleBackToHome} />;
+  }
 
   const serviceCards = [
     {
@@ -64,7 +71,8 @@ function App() {
       title: 'Profile Info',
       description: 'User ID, Last login',
       color: 'bg-slate-50 text-slate-600',
-      hoverColor: 'hover:bg-slate-100'
+      hoverColor: 'hover:bg-slate-100',
+      onClick: handleProfileInfoClick
     },
     {
       icon: Wifi,
