@@ -16,6 +16,19 @@ interface CallRecord {
 const CallHistory: React.FC<CallHistoryProps> = ({ onBack }) => {
   const [searchTerm, setSearchTerm] = React.useState('');
 
+  const formatTimestamp = (timestamp: string) => {
+    const date = new Date(timestamp);
+    return date.toLocaleString('en-US', {
+      year: 'numeric',
+      month: '2-digit',
+      day: '2-digit',
+      hour: '2-digit',
+      minute: '2-digit',
+      second: '2-digit',
+      hour12: false
+    }).replace(/(\d{4})\/(\d{2})\/(\d{2}),/, '$1-$2-$3');
+  };
+
   const callRecords: CallRecord[] = [
     { sponsor: '234707549974', beneficiary: '+234707549973', timestamp: '2025-07-24T13:28:17', status: 'Success', duration: 12 },
     { sponsor: '234707549974', beneficiary: '+234707549973', timestamp: '2025-07-24T13:08:40', status: 'Success', duration: 8 },
@@ -64,19 +77,6 @@ const CallHistory: React.FC<CallHistoryProps> = ({ onBack }) => {
     record.status.toLowerCase().includes(searchTerm.toLowerCase()) ||
     formatTimestamp(record.timestamp).toLowerCase().includes(searchTerm.toLowerCase())
   );
-
-  const formatTimestamp = (timestamp: string) => {
-    const date = new Date(timestamp);
-    return date.toLocaleString('en-US', {
-      year: 'numeric',
-      month: '2-digit',
-      day: '2-digit',
-      hour: '2-digit',
-      minute: '2-digit',
-      second: '2-digit',
-      hour12: false
-    }).replace(/(\d{4})\/(\d{2})\/(\d{2}),/, '$1-$2-$3');
-  };
 
   const getStatusColor = (status: string) => {
     return status === 'Success' ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800';
