@@ -4,6 +4,7 @@ import BeneficiaryLists from './components/BeneficiaryLists';
 import ProfileInfo from './components/ProfileInfo';
 import OptInOut from './components/OptInOut';
 import RoamingStatus from './components/RoamingStatus';
+import MCAHistory from './components/MCAHistory';
 import { 
   Search, 
   FileText, 
@@ -11,6 +12,7 @@ import {
   Wifi, 
   Phone, 
   CheckCircle,
+  CreditCard,
   Menu,
   X
 } from 'lucide-react';
@@ -18,7 +20,7 @@ import {
 function App() {
   const [msisdn, setMsisdn] = useState('234707XXXXXXX');
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const [currentPage, setCurrentPage] = useState<'home' | 'call-history' | 'beneficiary-lists' | 'profile-info' | 'opt-in-out' | 'roaming'>('home');
+  const [currentPage, setCurrentPage] = useState<'home' | 'call-history' | 'beneficiary-lists' | 'profile-info' | 'opt-in-out' | 'roaming' | 'mca-history'>('home');
 
   const handleSearch = () => {
     // Search functionality would be implemented here
@@ -51,6 +53,10 @@ function App() {
     setCurrentPage('roaming');
   };
 
+  const handleMCAHistoryClick = () => {
+    setCurrentPage('mca-history');
+  };
+
   const handleBackToHome = () => {
     setCurrentPage('home');
   };
@@ -73,6 +79,10 @@ function App() {
 
   if (currentPage === 'roaming') {
     return <RoamingStatus onBack={handleBackToHome} />;
+  }
+
+  if (currentPage === 'mca-history') {
+    return <MCAHistory onBack={handleBackToHome} />;
   }
 
   const serviceCards = [
@@ -115,6 +125,14 @@ function App() {
       color: 'bg-green-50 text-green-600',
       hoverColor: 'hover:bg-green-100',
       onClick: handleOptInOutClick
+    },
+    {
+      icon: CreditCard,
+      title: 'MCA History',
+      description: 'Mobile Credit Advance logs',
+      color: 'bg-purple-50 text-purple-600',
+      hoverColor: 'hover:bg-purple-100',
+      onClick: handleMCAHistoryClick
     }
   ];
 
