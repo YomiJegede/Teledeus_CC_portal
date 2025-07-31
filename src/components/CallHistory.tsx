@@ -132,7 +132,7 @@ const CallHistory: React.FC<CallHistoryProps> = ({ onBack }) => {
           <div className="max-w-6xl mx-auto">
             {/* Page Header */}
             <div className="mb-8">
-              <h1 className="text-3xl font-bold text-gray-900 mb-2">Call History</h1>
+              <h1 className="text-3xl font-bold text-gray-900 mb-2">Pay4Me Call History</h1>
               <p className="text-gray-600">Collect-call history for +234707549973</p>
             </div>
 

@@ -103,7 +103,7 @@ const MCAHistory: React.FC<MCAHistoryProps> = ({ onBack }) => {
           <div className="p-6">
             <h3 className="text-sm font-semibold text-gray-700 mb-6 flex items-center">
               <CreditCard className="w-4 h-4 mr-2 text-blue-500" />
-              MCA Management
+              Missed Call Alert Management
             </h3>
             <ul className="space-y-3">
               <li>
@@ -130,8 +130,8 @@ const MCAHistory: React.FC<MCAHistoryProps> = ({ onBack }) => {
           <div className="max-w-6xl mx-auto">
             {/* Page Header */}
             <div className="mb-8">
-              <h1 className="text-3xl font-bold text-gray-900 mb-2">MCA History</h1>
-              <p className="text-gray-600">Mobile Credit Advance transaction history for +234707549973</p>
+              <h1 className="text-3xl font-bold text-gray-900 mb-2">Missed Call Alert History</h1>
+              <p className="text-gray-600">Missed Call Alert transaction history for +234707549973</p>
             </div>
 
             {/* Summary Cards */}
@@ -220,7 +220,7 @@ const MCAHistory: React.FC<MCAHistoryProps> = ({ onBack }) => {
               <div className="px-6 py-4 border-b border-gray-200/50 bg-gradient-to-r from-blue-50 to-indigo-50">
                 <h2 className="text-xl font-semibold text-gray-900 flex items-center">
                   <CreditCard className="w-6 h-6 mr-2 text-blue-500" />
-                  MCA Transaction Records
+                  Missed Call Alert Transaction Records
                 </h2>
                 <p className="text-sm text-gray-600 mt-1">
                   {filteredRecords.length} of {mcaRecords.length} records

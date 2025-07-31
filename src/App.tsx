@@ -112,7 +112,7 @@ function App() {
     },
     {
       icon: Phone,
-      title: 'Call History',
+      title: 'Pay4Me Call History',
       description: 'View Pay4Me logs',
       color: 'bg-emerald-50 text-emerald-600',
       hoverColor: 'hover:bg-emerald-100',
@@ -128,8 +128,8 @@ function App() {
     },
     {
       icon: CreditCard,
-      title: 'MCA History',
-      description: 'Mobile Credit Advance logs',
+      title: 'Missed Call Alert History',
+      description: 'Missed Call Alert logs',
       color: 'bg-purple-50 text-purple-600',
       hoverColor: 'hover:bg-purple-100',
       onClick: handleMCAHistoryClick
