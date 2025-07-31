@@ -5,6 +5,7 @@ import ProfileInfo from './components/ProfileInfo';
 import OptInOut from './components/OptInOut';
 import RoamingStatus from './components/RoamingStatus';
 import MCAHistory from './components/MCAHistory';
+import UserConsentHistory from './components/UserConsentHistory';
 import { 
   Search, 
   FileText, 
@@ -13,6 +14,7 @@ import {
   Phone, 
   CheckCircle,
   CreditCard,
+  UserCheck,
   Menu,
   X
 } from 'lucide-react';
@@ -20,7 +22,7 @@ import {
 function App() {
   const [msisdn, setMsisdn] = useState('234707XXXXXXX');
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const [currentPage, setCurrentPage] = useState<'home' | 'call-history' | 'beneficiary-lists' | 'profile-info' | 'opt-in-out' | 'roaming' | 'mca-history'>('home');
+  const [currentPage, setCurrentPage] = useState<'home' | 'call-history' | 'beneficiary-lists' | 'profile-info' | 'opt-in-out' | 'roaming' | 'mca-history' | 'user-consent-history'>('home');
 
   const handleSearch = () => {
     // Search functionality would be implemented here
@@ -57,6 +59,10 @@ function App() {
     setCurrentPage('mca-history');
   };
 
+  const handleUserConsentHistoryClick = () => {
+    setCurrentPage('user-consent-history');
+  };
+
   const handleBackToHome = () => {
     setCurrentPage('home');
   };
@@ -83,6 +89,10 @@ function App() {
 
   if (currentPage === 'mca-history') {
     return <MCAHistory onBack={handleBackToHome} />;
+  }
+
+  if (currentPage === 'user-consent-history') {
+    return <UserConsentHistory onBack={handleBackToHome} />;
   }
 
   const serviceCards = [
@@ -133,6 +143,14 @@ function App() {
       color: 'bg-purple-50 text-purple-600',
       hoverColor: 'hover:bg-purple-100',
       onClick: handleMCAHistoryClick
+    },
+    {
+      icon: UserCheck,
+      title: 'User Consent History',
+      description: 'Consent and authorization logs',
+      color: 'bg-indigo-50 text-indigo-600',
+      hoverColor: 'hover:bg-indigo-100',
+      onClick: handleUserConsentHistoryClick
     }
   ];
 
