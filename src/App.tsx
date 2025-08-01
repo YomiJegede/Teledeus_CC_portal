@@ -3,14 +3,12 @@ import CallHistory from './components/CallHistory';
 import BeneficiaryLists from './components/BeneficiaryLists';
 import ProfileInfo from './components/ProfileInfo';
 import OptInOut from './components/OptInOut';
-import RoamingStatus from './components/RoamingStatus';
 import MCAHistory from './components/MCAHistory';
 import UserConsentHistory from './components/UserConsentHistory';
 import { 
   Search, 
   FileText, 
   User, 
-  Wifi, 
   Phone, 
   CheckCircle,
   CreditCard,
@@ -22,7 +20,7 @@ import {
 function App() {
   const [msisdn, setMsisdn] = useState('234707XXXXXXX');
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const [currentPage, setCurrentPage] = useState<'home' | 'call-history' | 'beneficiary-lists' | 'profile-info' | 'opt-in-out' | 'roaming' | 'mca-history' | 'user-consent-history'>('home');
+  const [currentPage, setCurrentPage] = useState<'home' | 'call-history' | 'beneficiary-lists' | 'profile-info' | 'opt-in-out' | 'mca-history' | 'user-consent-history'>('home');
 
   const handleSearch = () => {
     // Search functionality would be implemented here
@@ -51,9 +49,6 @@ function App() {
     setCurrentPage('opt-in-out');
   };
 
-  const handleRoamingClick = () => {
-    setCurrentPage('roaming');
-  };
 
   const handleMCAHistoryClick = () => {
     setCurrentPage('mca-history');
@@ -83,9 +78,6 @@ function App() {
     return <OptInOut onBack={handleBackToHome} />;
   }
 
-  if (currentPage === 'roaming') {
-    return <RoamingStatus onBack={handleBackToHome} />;
-  }
 
   if (currentPage === 'mca-history') {
     return <MCAHistory onBack={handleBackToHome} />;
@@ -111,14 +103,6 @@ function App() {
       color: 'bg-slate-50 text-slate-600',
       hoverColor: 'hover:bg-slate-100',
       onClick: handleProfileInfoClick
-    },
-    {
-      icon: Wifi,
-      title: 'Roaming',
-      description: 'Roaming status',
-      color: 'bg-cyan-50 text-cyan-600',
-      hoverColor: 'hover:bg-cyan-100',
-      onClick: handleRoamingClick
     },
     {
       icon: Phone,
