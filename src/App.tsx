@@ -3,6 +3,7 @@ import CallHistory from './components/CallHistory';
 import BeneficiaryLists from './components/BeneficiaryLists';
 import ProfileInfo from './components/ProfileInfo';
 import OptInOut from './components/OptInOut';
+import Pay4MeOptInOut from './components/Pay4MeOptInOut';
 import MCAHistory from './components/MCAHistory';
 import UserConsentHistory from './components/UserConsentHistory';
 import { 
@@ -27,7 +28,7 @@ function App() {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [userProfile, setUserProfile] = useState({ name: '', email: '' });
-  const [currentPage, setCurrentPage] = useState<'home' | 'call-history' | 'beneficiary-lists' | 'profile-info' | 'opt-in-out' | 'mca-history' | 'user-consent-history'>('home');
+  const [currentPage, setCurrentPage] = useState<'home' | 'call-history' | 'beneficiary-lists' | 'profile-info' | 'opt-in-out' | 'pay4me-opt-in-out' | 'mca-history' | 'user-consent-history'>('home');
 
   const handleSearch = () => {
     // Search functionality would be implemented here
@@ -81,6 +82,9 @@ function App() {
     setCurrentPage('opt-in-out');
   };
 
+  const handlePay4MeOptInOutClick = () => {
+    setCurrentPage('pay4me-opt-in-out');
+  };
 
   const handleMCAHistoryClick = () => {
     setCurrentPage('mca-history');
@@ -110,6 +114,9 @@ function App() {
     return <OptInOut onBack={handleBackToHome} />;
   }
 
+  if (currentPage === 'pay4me-opt-in-out') {
+    return <Pay4MeOptInOut onBack={handleBackToHome} />;
+  }
 
   if (currentPage === 'mca-history') {
     return <MCAHistory onBack={handleBackToHome} />;
@@ -143,6 +150,14 @@ function App() {
       color: 'bg-green-50 text-green-600',
       hoverColor: 'hover:bg-green-100',
       onClick: handleOptInOutClick
+    },
+    {
+      icon: Phone,
+      title: 'Pay4Me Opt In/Out',
+      description: 'Enable/Disable Pay4Me service',
+      color: 'bg-teal-50 text-teal-600',
+      hoverColor: 'hover:bg-teal-100',
+      onClick: handlePay4MeOptInOutClick
     },
     {
       icon: CreditCard,
