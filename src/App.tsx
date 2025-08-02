@@ -174,7 +174,7 @@ function App() {
                 <span className="text-white font-bold text-lg">T</span>
               </div>
               <div className="hidden sm:block">
-                <h1 className="text-xl font-bold text-gray-900">Teledus</h1>
+                <h1 className="text-xl font-bold text-gray-900">Teledeus</h1>
                 <p className="text-sm text-gray-500">Collect Call Service</p>
               </div>
             </div>
@@ -263,7 +263,7 @@ function App() {
           /* Welcome Section for Non-Signed In Users */
           <div className="text-center py-16">
             <div className="max-w-2xl mx-auto">
-              <h1 className="text-4xl font-bold text-gray-900 mb-4">Welcome to Teledus Portal</h1>
+              <h1 className="text-4xl font-bold text-gray-900 mb-4">Welcome to Teledeus Portal</h1>
               <p className="text-xl text-gray-600 mb-8">
                 Access your collect call service information and manage your account settings.
               </p>
@@ -335,7 +335,7 @@ function App() {
         {/* Footer Info */}
         <div className="mt-12 text-center">
           <p className="text-gray-500 text-sm">
-            © 2025 Teledus. All rights reserved. | Secure customer portal for collect call services.
+            © 2025 Teledeus. All rights reserved. | Secure customer portal for collect call services.
           </p>
         </div>
       </main>
@@ -349,7 +349,7 @@ function App() {
                 <LogIn className="w-8 h-8 text-white" />
               </div>
               <h2 className="text-2xl font-bold text-gray-900 mb-2">Sign In</h2>
-              <p className="text-gray-600">Access your Teledus customer portal</p>
+              <p className="text-gray-600">Access your Teledeus customer portal</p>
             </div>
             
             <form onSubmit={handleSignInSubmit} className="space-y-4">

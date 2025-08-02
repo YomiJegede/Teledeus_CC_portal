@@ -136,7 +136,7 @@ const OptInOut: React.FC<OptInOutProps> = ({ onBack }) => {
             {/* Page Header */}
             <div className="mb-8">
               <h1 className="text-3xl font-bold text-gray-900 mb-2">Service Opt In/Out</h1>
-              <p className="text-gray-600">Manage your Teledus collect call service status for +234707549973</p>
+              <p className="text-gray-600">Manage your Teledeus collect call service status for +234707549973</p>
             </div>
 
             {/* Current Status Card */}
@@ -312,7 +312,7 @@ const OptInOut: React.FC<OptInOutProps> = ({ onBack }) => {
                 Confirm {pendingAction === 'opt-in' ? 'Opt In' : 'Opt Out'}
               </h3>
               <p className="text-gray-600 mb-6">
-                Are you sure you want to {pendingAction === 'opt-in' ? 'opt in to' : 'opt out of'} the Teledus collect call service?
+                Are you sure you want to {pendingAction === 'opt-in' ? 'opt in to' : 'opt out of'} the Teledeus collect call service?
               </p>
               <div className="flex space-x-4">
                 <button
