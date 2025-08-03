@@ -191,7 +191,7 @@ function App() {
     },
     {
       icon: CheckCircle,
-      title: 'Opt In/Out',
+      title: 'MCA Opt In/Out',
       description: 'Enable/Disable',
       color: 'bg-green-50 text-green-600',
       hoverColor: 'hover:bg-green-100',
