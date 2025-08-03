@@ -25,8 +25,17 @@ function App() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isSignedIn, setIsSignedIn] = useState(false);
   const [showSignInModal, setShowSignInModal] = useState(false);
+  const [showSignUpModal, setShowSignUpModal] = useState(false);
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
+  const [signUpData, setSignUpData] = useState({
+    username: '',
+    email: '',
+    password: '',
+    confirmPassword: '',
+    phoneNumber: '',
+    fullName: ''
+  });
   const [userProfile, setUserProfile] = useState({ name: '', email: '' });
   const [currentPage, setCurrentPage] = useState<'home' | 'call-history' | 'beneficiary-lists' | 'profile-info' | 'opt-in-out' | 'pay4me-opt-in-out' | 'mca-history' | 'user-consent-history'>('home');
 
@@ -43,6 +52,10 @@ function App() {
 
   const handleSignIn = () => {
     setShowSignInModal(true);
+  };
+
+  const handleSignUp = () => {
+    setShowSignUpModal(true);
   };
 
   const handleSignOut = () => {
@@ -64,6 +77,39 @@ function App() {
       setUsername('');
       setPassword('');
     }
+  };
+
+  const handleSignUpSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    // Validation
+    if (signUpData.password !== signUpData.confirmPassword) {
+      alert('Passwords do not match!');
+      return;
+    }
+    if (signUpData.username && signUpData.email && signUpData.password && signUpData.fullName && signUpData.phoneNumber) {
+      // In real app, this would be API call to create account
+      setIsSignedIn(true);
+      setUserProfile({ 
+        name: signUpData.fullName,
+        email: signUpData.email
+      });
+      setShowSignUpModal(false);
+      setSignUpData({
+        username: '',
+        email: '',
+        password: '',
+        confirmPassword: '',
+        phoneNumber: '',
+        fullName: ''
+      });
+    }
+  };
+
+  const handleSignUpInputChange = (field: string, value: string) => {
+    setSignUpData(prev => ({
+      ...prev,
+      [field]: value
+    }));
   };
 
   const handleProfileClick = () => {
@@ -215,13 +261,22 @@ function App() {
                   </button>
                 </>
               ) : (
-                <button
-                  onClick={handleSignIn}
-                  className="flex items-center space-x-2 bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-md text-sm font-medium transition-colors"
-                >
-                  <LogIn size={16} />
-                  <span>Sign In</span>
-                </button>
+                <div className="flex items-center space-x-3">
+                  <button
+                    onClick={handleSignUp}
+                    className="flex items-center space-x-2 text-gray-600 hover:text-blue-600 px-3 py-2 rounded-md text-sm font-medium transition-colors"
+                  >
+                    <User size={16} />
+                    <span>Sign Up</span>
+                  </button>
+                  <button
+                    onClick={handleSignIn}
+                    className="flex items-center space-x-2 bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-md text-sm font-medium transition-colors"
+                  >
+                    <LogIn size={16} />
+                    <span>Sign In</span>
+                  </button>
+                </div>
               )}
             </div>
 
@@ -258,13 +313,22 @@ function App() {
                     </button>
                   </>
                 ) : (
-                  <button
-                    onClick={handleSignIn}
-                    className="flex items-center space-x-2 bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-md text-sm font-medium transition-colors"
-                  >
-                    <LogIn size={16} />
-                    <span>Sign In</span>
-                  </button>
+                  <div className="flex flex-col space-y-2">
+                    <button
+                      onClick={handleSignUp}
+                      className="flex items-center space-x-2 text-gray-600 hover:text-blue-600 px-3 py-2 rounded-md text-sm font-medium transition-colors"
+                    >
+                      <User size={16} />
+                      <span>Sign Up</span>
+                    </button>
+                    <button
+                      onClick={handleSignIn}
+                      className="flex items-center space-x-2 bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-md text-sm font-medium transition-colors"
+                    >
+                      <LogIn size={16} />
+                      <span>Sign In</span>
+                    </button>
+                  </div>
                 )}
               </div>
             </div>
@@ -289,6 +353,16 @@ function App() {
                 <LogIn size={24} />
                 <span>Sign In to Continue</span>
               </button>
+              <div className="mt-4 text-center">
+                <p className="text-gray-600 mb-4">Don't have an account?</p>
+                <button
+                  onClick={handleSignUp}
+                  className="bg-white hover:bg-gray-50 text-blue-600 border-2 border-blue-600 px-8 py-4 rounded-lg font-semibold text-lg transition-all duration-200 flex items-center justify-center space-x-3 mx-auto hover:shadow-lg transform hover:-translate-y-0.5"
+                >
+                  <User size={24} />
+                  <span>Create New Account</span>
+                </button>
+              </div>
             </div>
           </div>
         ) : (
@@ -414,6 +488,144 @@ function App() {
                 </button>
               </div>
             </form>
+          </div>
+        </div>
+      )}
+
+      {/* Sign Up Modal */}
+      {showSignUpModal && (
+        <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50">
+          <div className="bg-white rounded-2xl shadow-2xl p-8 max-w-md w-full mx-4 max-h-[90vh] overflow-y-auto">
+            <div className="text-center mb-6">
+              <div className="w-16 h-16 bg-gradient-to-br from-green-500 to-blue-600 rounded-full flex items-center justify-center mx-auto mb-4">
+                <User className="w-8 h-8 text-white" />
+              </div>
+              <h2 className="text-2xl font-bold text-gray-900 mb-2">Create Account</h2>
+              <p className="text-gray-600">Join the Teledeus customer portal</p>
+            </div>
+            
+            <form onSubmit={handleSignUpSubmit} className="space-y-4">
+              <div>
+                <label htmlFor="fullName" className="block text-sm font-medium text-gray-700 mb-2">
+                  Full Name
+                </label>
+                <input
+                  type="text"
+                  id="fullName"
+                  value={signUpData.fullName}
+                  onChange={(e) => handleSignUpInputChange('fullName', e.target.value)}
+                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors"
+                  placeholder="Enter your full name"
+                  required
+                />
+              </div>
+              
+              <div>
+                <label htmlFor="signUpUsername" className="block text-sm font-medium text-gray-700 mb-2">
+                  Username
+                </label>
+                <input
+                  type="text"
+                  id="signUpUsername"
+                  value={signUpData.username}
+                  onChange={(e) => handleSignUpInputChange('username', e.target.value)}
+                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors"
+                  placeholder="Choose a username"
+                  required
+                />
+              </div>
+              
+              <div>
+                <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-2">
+                  Email Address
+                </label>
+                <input
+                  type="email"
+                  id="email"
+                  value={signUpData.email}
+                  onChange={(e) => handleSignUpInputChange('email', e.target.value)}
+                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors"
+                  placeholder="Enter your email address"
+                  required
+                />
+              </div>
+              
+              <div>
+                <label htmlFor="phoneNumber" className="block text-sm font-medium text-gray-700 mb-2">
+                  Phone Number
+                </label>
+                <input
+                  type="tel"
+                  id="phoneNumber"
+                  value={signUpData.phoneNumber}
+                  onChange={(e) => handleSignUpInputChange('phoneNumber', e.target.value)}
+                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors"
+                  placeholder="Enter your phone number"
+                  required
+                />
+              </div>
+              
+              <div>
+                <label htmlFor="signUpPassword" className="block text-sm font-medium text-gray-700 mb-2">
+                  Password
+                </label>
+                <input
+                  type="password"
+                  id="signUpPassword"
+                  value={signUpData.password}
+                  onChange={(e) => handleSignUpInputChange('password', e.target.value)}
+                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors"
+                  placeholder="Create a password"
+                  required
+                />
+              </div>
+              
+              <div>
+                <label htmlFor="confirmPassword" className="block text-sm font-medium text-gray-700 mb-2">
+                  Confirm Password
+                </label>
+                <input
+                  type="password"
+                  id="confirmPassword"
+                  value={signUpData.confirmPassword}
+                  onChange={(e) => handleSignUpInputChange('confirmPassword', e.target.value)}
+                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors"
+                  placeholder="Confirm your password"
+                  required
+                />
+              </div>
+              
+              <div className="flex space-x-4 pt-4">
+                <button
+                  type="button"
+                  onClick={() => setShowSignUpModal(false)}
+                  className="flex-1 px-4 py-3 bg-gray-100 hover:bg-gray-200 text-gray-700 rounded-lg font-medium transition-colors"
+                >
+                  Cancel
+                </button>
+                <button
+                  type="submit"
+                  className="flex-1 px-4 py-3 bg-green-600 hover:bg-green-700 text-white rounded-lg font-medium transition-colors"
+                >
+                  Create Account
+                </button>
+              </div>
+            </form>
+            
+            <div className="mt-6 text-center">
+              <p className="text-gray-600 text-sm">
+                Already have an account?{' '}
+                <button
+                  onClick={() => {
+                    setShowSignUpModal(false);
+                    setShowSignInModal(true);
+                  }}
+                  className="text-blue-600 hover:text-blue-700 font-medium"
+                >
+                  Sign In
+                </button>
+              </p>
+            </div>
           </div>
         </div>
       )}
