@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
-import { ArrowLeft, CheckCircle, XCircle, ToggleLeft, ToggleRight, Shield, Clock, User, AlertTriangle, Phone } from 'lucide-react';
+import { ArrowLeft, CheckCircle, XCircle, ToggleLeft, ToggleRight, Shield, Clock, User, AlertTriangle, Search, Filter, History } from 'lucide-react';
 
-interface Pay4MeOptInOutProps {
+interface OptInOutProps {
   onBack: () => void;
 }
 
@@ -15,16 +15,45 @@ interface ServiceStatus {
   streakType: 'opted-in' | 'opted-out';
 }
 
-const Pay4MeOptInOut: React.FC<Pay4MeOptInOutProps> = ({ onBack }) => {
+interface OptInOutRecord {
+  beneficiary: string;
+  date: string;
+  status: 'Opt In' | 'Opt Out';
+  timestamp: string;
+}
+
+const OptInOut: React.FC<OptInOutProps> = ({ onBack }) => {
+  const [searchTerm, setSearchTerm] = useState('');
   const [serviceStatus, setServiceStatus] = useState<ServiceStatus>({
     isOptedIn: true,
-    lastChanged: '2025-01-08T16:20:00',
+    lastChanged: '2025-01-10T14:30:00',
     changedBy: 'User',
-    totalOptIns: 8,
-    totalOptOuts: 2,
-    currentStreak: 32,
+    totalOptIns: 12,
+    totalOptOuts: 3,
+    currentStreak: 45,
     streakType: 'opted-in'
   });
+
+  const optInOutHistory: OptInOutRecord[] = [
+    { beneficiary: '+234707549973', date: '2025-01-15', status: 'Opt In', timestamp: '2025-01-15T14:30:22' },
+    { beneficiary: '+234707549973', date: '2025-01-10', status: 'Opt In', timestamp: '2025-01-10T14:30:00' },
+    { beneficiary: '+234707549973', date: '2025-01-05', status: 'Opt Out', timestamp: '2025-01-05T09:15:33' },
+    { beneficiary: '+234707549973', date: '2025-01-01', status: 'Opt In', timestamp: '2025-01-01T16:20:00' },
+    { beneficiary: '+234707549973', date: '2024-12-28', status: 'Opt Out', timestamp: '2024-12-28T11:45:18' },
+    { beneficiary: '+234707549973', date: '2024-12-25', status: 'Opt In', timestamp: '2024-12-25T13:22:44' },
+    { beneficiary: '+234707549973', date: '2024-12-20', status: 'Opt Out', timestamp: '2024-12-20T10:18:29' },
+    { beneficiary: '+234707549973', date: '2024-12-15', status: 'Opt In', timestamp: '2024-12-15T15:33:55' },
+    { beneficiary: '+234707549973', date: '2024-12-10', status: 'Opt In', timestamp: '2024-12-10T08:42:16' },
+    { beneficiary: '+234707549973', date: '2024-12-05', status: 'Opt Out', timestamp: '2024-12-05T12:28:37' },
+    { beneficiary: '+234707549973', date: '2024-12-01', status: 'Opt In', timestamp: '2024-12-01T17:14:52' },
+    { beneficiary: '+234707549973', date: '2024-11-25', status: 'Opt In', timestamp: '2024-11-25T14:47:23' }
+  ];
+
+  const filteredHistory = optInOutHistory.filter(record =>
+    record.beneficiary.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    record.status.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    record.date.toLowerCase().includes(searchTerm.toLowerCase())
+  );
 
   const [isChanging, setIsChanging] = useState(false);
   const [showConfirmation, setShowConfirmation] = useState(false);
@@ -85,6 +114,21 @@ const Pay4MeOptInOut: React.FC<Pay4MeOptInOutProps> = ({ onBack }) => {
     return isOptedIn ? CheckCircle : XCircle;
   };
 
+  const getStatusColor = (status: string) => {
+    return status === 'Opt In' 
+      ? 'bg-green-100 text-green-800 border-green-200' 
+      : 'bg-red-100 text-red-800 border-red-200';
+  };
+
+  const formatDate = (dateString: string) => {
+    const date = new Date(dateString);
+    return date.toLocaleDateString('en-US', {
+      year: 'numeric',
+      month: 'short',
+      day: 'numeric'
+    });
+  };
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-50 via-blue-50 to-indigo-50">
       {/* Header */}
@@ -107,13 +151,13 @@ const Pay4MeOptInOut: React.FC<Pay4MeOptInOutProps> = ({ onBack }) => {
         <div className="w-64 bg-white/60 backdrop-blur-sm min-h-screen border-r border-gray-200/50">
           <div className="p-6">
             <h3 className="text-sm font-semibold text-gray-700 mb-6 flex items-center">
-              <Phone className="w-4 h-4 mr-2 text-blue-500" />
-              Pay4Me Control
+              <CheckCircle className="w-4 h-4 mr-2 text-blue-500" />
+              Service Control
             </h3>
             <ul className="space-y-3">
               <li>
                 <button className="w-full text-left px-4 py-3 text-sm text-blue-600 bg-blue-50 rounded-lg font-medium">
-                  Pay4Me Opt In/Out Status
+                  Opt In/Out Status
                 </button>
               </li>
               <li>
@@ -123,7 +167,7 @@ const Pay4MeOptInOut: React.FC<Pay4MeOptInOutProps> = ({ onBack }) => {
               </li>
               <li>
                 <button className="w-full text-left px-4 py-3 text-sm text-gray-600 hover:bg-blue-50 hover:text-blue-600 rounded-lg transition-all duration-200 hover:scale-105">
-                  Call Preferences
+                  Preferences
                 </button>
               </li>
             </ul>
@@ -135,8 +179,8 @@ const Pay4MeOptInOut: React.FC<Pay4MeOptInOutProps> = ({ onBack }) => {
           <div className="max-w-4xl mx-auto">
             {/* Page Header */}
             <div className="mb-8">
-              <h1 className="text-3xl font-bold text-gray-900 mb-2">Pay4Me Service Opt In/Out</h1>
-              <p className="text-gray-600">Manage your Teledeus Pay4Me collect call service status for +234707549973</p>
+              <h1 className="text-3xl font-bold text-gray-900 mb-2">MCA Opt In/Out</h1>
+              <p className="text-gray-600">Manage your Teledeus collect call service status for +234707549973</p>
             </div>
 
             {/* Current Status Card */}
@@ -151,7 +195,7 @@ const Pay4MeOptInOut: React.FC<Pay4MeOptInOutProps> = ({ onBack }) => {
                   </div>
                   <div>
                     <h2 className="text-2xl font-bold text-gray-900 mb-2">
-                      {serviceStatus.isOptedIn ? 'Pay4Me Service Active' : 'Pay4Me Service Inactive'}
+                      {serviceStatus.isOptedIn ? 'MCA Service Active' : 'MCA Service Inactive'}
                     </h2>
                     <span className={`inline-flex px-4 py-2 text-sm font-semibold rounded-full border ${getStatusColor(serviceStatus.isOptedIn)}`}>
                       {serviceStatus.isOptedIn ? 'Opted In' : 'Opted Out'}
@@ -176,13 +220,13 @@ const Pay4MeOptInOut: React.FC<Pay4MeOptInOutProps> = ({ onBack }) => {
             <div className="bg-white/70 backdrop-blur-sm rounded-2xl shadow-xl border border-gray-200/50 p-8 mb-8">
               <h3 className="text-xl font-semibold text-gray-900 mb-6 flex items-center">
                 <ToggleRight className="w-6 h-6 mr-2 text-blue-500" />
-                Pay4Me Service Control
+                MCA Service Control
               </h3>
               
               {isChanging ? (
                 <div className="text-center py-8">
                   <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto mb-4"></div>
-                  <p className="text-gray-600">Updating Pay4Me service status...</p>
+                  <p className="text-gray-600">Updating MCA service status...</p>
                 </div>
               ) : (
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
@@ -196,7 +240,7 @@ const Pay4MeOptInOut: React.FC<Pay4MeOptInOutProps> = ({ onBack }) => {
                     }`}
                   >
                     <CheckCircle size={24} />
-                    <span>Opt In to Pay4Me</span>
+                    <span>Opt In to MCA</span>
                   </button>
                   
                   <button
@@ -209,7 +253,7 @@ const Pay4MeOptInOut: React.FC<Pay4MeOptInOutProps> = ({ onBack }) => {
                     }`}
                   >
                     <XCircle size={24} />
-                    <span>Opt Out of Pay4Me</span>
+                    <span>Opt Out of MCA</span>
                   </button>
                 </div>
               )}
@@ -254,39 +298,66 @@ const Pay4MeOptInOut: React.FC<Pay4MeOptInOutProps> = ({ onBack }) => {
               </div>
             </div>
 
+            {/* Opt In/Out History Table */}
+            <div className="bg-white/70 backdrop-blur-sm rounded-2xl shadow-xl border border-gray-200/50 mb-8">
+              <div className="px-6 py-4 border-b border-gray-200/50 bg-gradient-to-r from-blue-50 to-indigo-50">
+                <h3 className="text-xl font-semibold text-gray-900 flex items-center">
+                  <History className="w-6 h-6 mr-2 text-blue-500" />
+                  MCA Opt In/Out History
+                </h3>
+                <p className="text-sm text-gray-600 mt-1">
+                  {filteredHistory.length} of {optInOutHistory.length} records
+                </p>
+              </div>
+
+              {/* Search */}
+              <div className="p-6 border-b border-gray-200/50">
+                <div className="relative">
+                  <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" size={20} />
+                  <input
+                    type="text"
+                    placeholder="Search by beneficiary, status, or date..."
+                    value={searchTerm}
+                    onChange={(e) => setSearchTerm(e.target.value)}
+                    className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200 bg-white/50 backdrop-blur-sm"
+                  />
+                </div>
+              </div>
+
+              {/* Table */}
+              <div className="overflow-x-auto">
+                <table className="w-full">
+                  <thead className="bg-gray-50/50">
+                    <tr>
+                      <th className="px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
+                        Beneficiary
+                      </th>
             {/* Service Information */}
             <div className="bg-white/70 backdrop-blur-sm rounded-2xl shadow-xl border border-gray-200/50 p-8">
               <h3 className="text-xl font-semibold text-gray-900 mb-6 flex items-center">
                 <Shield className="w-6 h-6 mr-2 text-blue-500" />
-                Pay4Me Service Information
+                Service Information
               </h3>
               <div className="space-y-4 text-gray-600">
                 <div className="flex items-start space-x-3">
                   <AlertTriangle className="w-5 h-5 text-amber-500 mt-0.5 flex-shrink-0" />
                   <div>
-                    <p className="font-medium text-gray-900">What is Pay4Me Service?</p>
-                    <p className="text-sm">Pay4Me allows you to receive collect calls where the caller pays for the call charges. When someone calls you and selects the Pay4Me option, they cover the cost of the conversation.</p>
+                    <p className="font-medium text-gray-900">What does Opt In mean?</p>
+                    <p className="text-sm">When opted in, you can receive collect calls from authorized numbers and sponsors can pay for your calls.</p>
                   </div>
                 </div>
                 <div className="flex items-start space-x-3">
                   <AlertTriangle className="w-5 h-5 text-amber-500 mt-0.5 flex-shrink-0" />
                   <div>
-                    <p className="font-medium text-gray-900">How does Opt In work?</p>
-                    <p className="text-sm">When opted in, you can receive Pay4Me collect calls from authorized numbers. Callers will be prompted to pay for the call before connecting to you.</p>
-                  </div>
-                </div>
-                <div className="flex items-start space-x-3">
-                  <AlertTriangle className="w-5 h-5 text-amber-500 mt-0.5 flex-shrink-0" />
-                  <div>
-                    <p className="font-medium text-gray-900">What happens when Opted Out?</p>
-                    <p className="text-sm">When opted out, you will not receive any Pay4Me collect calls. All such calls will be automatically declined and callers will hear a message that the service is unavailable.</p>
+                    <p className="font-medium text-gray-900">What does Opt Out mean?</p>
+                    <p className="text-sm">When opted out, you will not receive any collect calls and the service will be completely disabled for your number.</p>
                   </div>
                 </div>
                 <div className="flex items-start space-x-3">
                   <AlertTriangle className="w-5 h-5 text-amber-500 mt-0.5 flex-shrink-0" />
                   <div>
                     <p className="font-medium text-gray-900">Can I change my status anytime?</p>
-                    <p className="text-sm">Yes, you can opt in or opt out of the Pay4Me service at any time. Changes take effect immediately and will apply to all future incoming collect calls.</p>
+                    <p className="text-sm">Yes, you can opt in or opt out of the service at any time. Changes take effect immediately.</p>
                   </div>
                 </div>
               </div>
@@ -316,10 +387,10 @@ const Pay4MeOptInOut: React.FC<Pay4MeOptInOutProps> = ({ onBack }) => {
                 })}
               </div>
               <h3 className="text-xl font-bold text-gray-900 mb-2">
-                Confirm Pay4Me {pendingAction === 'opt-in' ? 'Opt In' : 'Opt Out'}
+                Confirm {pendingAction === 'opt-in' ? 'Opt In' : 'Opt Out'}
               </h3>
               <p className="text-gray-600 mb-6">
-                Are you sure you want to {pendingAction === 'opt-in' ? 'opt in to' : 'opt out of'} the Teledeus Pay4Me collect call service?
+                Are you sure you want to {pendingAction === 'opt-in' ? 'opt in to' : 'opt out of'} the Teledeus collect call service?
               </p>
               <div className="flex space-x-4">
                 <button
@@ -347,4 +418,4 @@ const Pay4MeOptInOut: React.FC<Pay4MeOptInOutProps> = ({ onBack }) => {
   );
 };
 
-export default Pay4MeOptInOut;
+export default OptInOut;

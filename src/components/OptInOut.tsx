@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { ArrowLeft, CheckCircle, XCircle, ToggleLeft, ToggleRight, Shield, Clock, User, AlertTriangle } from 'lucide-react';
+import { ArrowLeft, CheckCircle, XCircle, ToggleLeft, ToggleRight, Shield, Clock, User, AlertTriangle, Search, History } from 'lucide-react';
 
 interface OptInOutProps {
   onBack: () => void;
@@ -15,7 +15,15 @@ interface ServiceStatus {
   streakType: 'opted-in' | 'opted-out';
 }
 
+interface OptInOutRecord {
+  beneficiary: string;
+  date: string;
+  status: 'Opt In' | 'Opt Out';
+  timestamp: string;
+}
+
 const OptInOut: React.FC<OptInOutProps> = ({ onBack }) => {
+  const [searchTerm, setSearchTerm] = useState('');
   const [serviceStatus, setServiceStatus] = useState<ServiceStatus>({
     isOptedIn: true,
     lastChanged: '2025-01-10T14:30:00',
@@ -25,6 +33,30 @@ const OptInOut: React.FC<OptInOutProps> = ({ onBack }) => {
     currentStreak: 45,
     streakType: 'opted-in'
   });
+
+  const optInOutHistory: OptInOutRecord[] = [
+    { beneficiary: '+234707549973', date: '2025-01-15', status: 'Opt In', timestamp: '2025-01-15T14:30:22' },
+    { beneficiary: '+234707549973', date: '2025-01-10', status: 'Opt In', timestamp: '2025-01-10T14:30:00' },
+    { beneficiary: '+234707549973', date: '2025-01-08', status: 'Opt Out', timestamp: '2025-01-08T09:15:33' },
+    { beneficiary: '+234707549973', date: '2025-01-05', status: 'Opt In', timestamp: '2025-01-05T16:20:00' },
+    { beneficiary: '+234707549973', date: '2025-01-02', status: 'Opt Out', timestamp: '2025-01-02T11:45:18' },
+    { beneficiary: '+234707549973', date: '2024-12-30', status: 'Opt In', timestamp: '2024-12-30T13:22:44' },
+    { beneficiary: '+234707549973', date: '2024-12-28', status: 'Opt In', timestamp: '2024-12-28T10:18:29' },
+    { beneficiary: '+234707549973', date: '2024-12-25', status: 'Opt Out', timestamp: '2024-12-25T15:33:55' },
+    { beneficiary: '+234707549973', date: '2024-12-20', status: 'Opt In', timestamp: '2024-12-20T08:42:16' },
+    { beneficiary: '+234707549973', date: '2024-12-15', status: 'Opt In', timestamp: '2024-12-15T12:28:37' },
+    { beneficiary: '+234707549973', date: '2024-12-10', status: 'Opt Out', timestamp: '2024-12-10T17:14:52' },
+    { beneficiary: '+234707549973', date: '2024-12-05', status: 'Opt In', timestamp: '2024-12-05T14:35:28' },
+    { beneficiary: '+234707549973', date: '2024-12-01', status: 'Opt In', timestamp: '2024-12-01T09:18:45' },
+    { beneficiary: '+234707549973', date: '2024-11-28', status: 'Opt In', timestamp: '2024-11-28T16:42:12' },
+    { beneficiary: '+234707549973', date: '2024-11-25', status: 'Opt In', timestamp: '2024-11-25T11:27:33' }
+  ];
+
+  const filteredHistory = optInOutHistory.filter(record =>
+    record.beneficiary.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    record.status.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    record.date.toLowerCase().includes(searchTerm.toLowerCase())
+  );
 
   const [isChanging, setIsChanging] = useState(false);
   const [showConfirmation, setShowConfirmation] = useState(false);
@@ -83,6 +115,21 @@ const OptInOut: React.FC<OptInOutProps> = ({ onBack }) => {
 
   const getStatusIcon = (isOptedIn: boolean) => {
     return isOptedIn ? CheckCircle : XCircle;
+  };
+
+  const getStatusColor = (status: string) => {
+    return status === 'Opt In' 
+      ? 'bg-green-100 text-green-800 border-green-200' 
+      : 'bg-red-100 text-red-800 border-red-200';
+  };
+
+  const formatDate = (dateString: string) => {
+    const date = new Date(dateString);
+    return date.toLocaleDateString('en-US', {
+      year: 'numeric',
+      month: 'short',
+      day: 'numeric'
+    });
   };
 
   return (
@@ -252,6 +299,85 @@ const OptInOut: React.FC<OptInOutProps> = ({ onBack }) => {
                   </div>
                 </div>
               </div>
+            </div>
+
+            {/* Opt In/Out History Table */}
+            <div className="bg-white/70 backdrop-blur-sm rounded-2xl shadow-xl border border-gray-200/50 mb-8">
+              <div className="px-6 py-4 border-b border-gray-200/50 bg-gradient-to-r from-blue-50 to-indigo-50">
+                <h3 className="text-xl font-semibold text-gray-900 flex items-center">
+                  <History className="w-6 h-6 mr-2 text-blue-500" />
+                  MCA Opt In/Out History
+                </h3>
+                <p className="text-sm text-gray-600 mt-1">
+                  {filteredHistory.length} of {optInOutHistory.length} records
+                </p>
+              </div>
+
+              {/* Search */}
+              <div className="p-6 border-b border-gray-200/50">
+                <div className="relative">
+                  <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" size={20} />
+                  <input
+                    type="text"
+                    placeholder="Search by beneficiary, status, or date..."
+                    value={searchTerm}
+                    onChange={(e) => setSearchTerm(e.target.value)}
+                    className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200 bg-white/50 backdrop-blur-sm"
+                  />
+                </div>
+              </div>
+
+              {/* Table */}
+              <div className="overflow-x-auto">
+                <table className="w-full">
+                  <thead className="bg-gray-50/50">
+                    <tr>
+                      <th className="px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
+                        Beneficiary
+                      </th>
+                      <th className="px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
+                        Date
+                      </th>
+                      <th className="px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
+                        Status
+                      </th>
+                    </tr>
+                  </thead>
+                  <tbody className="divide-y divide-gray-200/50">
+                    {filteredHistory.map((record, index) => (
+                      <tr 
+                        key={index} 
+                        className="hover:bg-blue-50/30 transition-all duration-200 group"
+                      >
+                        <td className="px-6 py-4 whitespace-nowrap">
+                          <div className="flex items-center">
+                            <div className="w-2 h-2 bg-blue-400 rounded-full mr-3 group-hover:bg-blue-500 transition-colors"></div>
+                            <span className="text-sm font-medium text-gray-900">{record.beneficiary}</span>
+                          </div>
+                        </td>
+                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600">
+                          {formatDate(record.date)}
+                        </td>
+                        <td className="px-6 py-4 whitespace-nowrap">
+                          <span className={`inline-flex px-3 py-1 text-xs font-semibold rounded-full border ${getStatusColor(record.status)}`}>
+                            {record.status}
+                          </span>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+
+              {filteredHistory.length === 0 && (
+                <div className="text-center py-12">
+                  <div className="text-gray-400 mb-4">
+                    <History size={48} />
+                  </div>
+                  <p className="text-gray-500 text-lg">No history records found</p>
+                  <p className="text-gray-400 text-sm">Try adjusting your search criteria</p>
+                </div>
+              )}
             </div>
 
             {/* Service Information */}
