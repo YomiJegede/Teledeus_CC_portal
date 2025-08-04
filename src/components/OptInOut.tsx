@@ -117,7 +117,7 @@ const OptInOut: React.FC<OptInOutProps> = ({ onBack }) => {
     return isOptedIn ? CheckCircle : XCircle;
   };
 
-  const getStatusColor = (status: string) => {
+  const getRecordStatusColor = (status: string) => {
     return status === 'Opt In' 
       ? 'bg-green-100 text-green-800 border-green-200' 
       : 'bg-red-100 text-red-800 border-red-200';
@@ -359,7 +359,7 @@ const OptInOut: React.FC<OptInOutProps> = ({ onBack }) => {
                           {formatDate(record.date)}
                         </td>
                         <td className="px-6 py-4 whitespace-nowrap">
-                          <span className={`inline-flex px-3 py-1 text-xs font-semibold rounded-full border ${getStatusColor(record.status)}`}>
+                          <span className={`inline-flex px-3 py-1 text-xs font-semibold rounded-full border ${getRecordStatusColor(record.status)}`}>
                             {record.status}
                           </span>
                         </td>
