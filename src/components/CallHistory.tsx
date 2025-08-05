@@ -1,5 +1,16 @@
 import React from 'react';
-import { ArrowLeft, Search, Filter } from 'lucide-react';
+import { ArrowLeft, Search, Filter, Download, FileSpreadsheet, FileText, File } from 'lucide-react';
+import * as XLSX from 'xlsx';
+import jsPDF from 'jspdf';
+import 'jspdf-autotable';
+import { saveAs } from 'file-saver';
+
+// Extend jsPDF type to include autoTable
+declare module 'jspdf' {
+  interface jsPDF {
+    autoTable: (options: any) => jsPDF;
+  }
+}
 
 interface CallHistoryProps {
   onBack: () => void;
@@ -15,6 +26,7 @@ interface CallRecord {
 
 const CallHistory: React.FC<CallHistoryProps> = ({ onBack }) => {
   const [searchTerm, setSearchTerm] = React.useState('');
+  const [showExportMenu, setShowExportMenu] = React.useState(false);
 
   const formatTimestamp = (timestamp: string) => {
     const date = new Date(timestamp);
@@ -80,6 +92,105 @@ const CallHistory: React.FC<CallHistoryProps> = ({ onBack }) => {
 
   const getStatusColor = (status: string) => {
     return status === 'Success' ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800';
+  };
+
+  const exportToCSV = () => {
+    const headers = ['Sponsor', 'Beneficiary', 'Timestamp', 'Status', 'Duration (seconds)'];
+    const csvContent = [
+      headers.join(','),
+      ...filteredRecords.map(record => [
+        record.sponsor,
+        record.beneficiary,
+        formatTimestamp(record.timestamp),
+        record.status,
+        record.duration.toString()
+      ].join(','))
+    ].join('\n');
+
+    const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+    saveAs(blob, `pay4me-call-history-${new Date().toISOString().split('T')[0]}.csv`);
+    setShowExportMenu(false);
+  };
+
+  const exportToExcel = () => {
+    const worksheet = XLSX.utils.json_to_sheet(
+      filteredRecords.map(record => ({
+        'Sponsor': record.sponsor,
+        'Beneficiary': record.beneficiary,
+        'Timestamp': formatTimestamp(record.timestamp),
+        'Status': record.status,
+        'Duration (seconds)': record.duration
+      }))
+    );
+
+    const workbook = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(workbook, worksheet, 'Pay4Me Call History');
+    
+    // Set column widths
+    const colWidths = [
+      { wch: 20 }, // Sponsor
+      { wch: 20 }, // Beneficiary
+      { wch: 25 }, // Timestamp
+      { wch: 15 }, // Status
+      { wch: 18 }  // Duration
+    ];
+    worksheet['!cols'] = colWidths;
+
+    XLSX.writeFile(workbook, `pay4me-call-history-${new Date().toISOString().split('T')[0]}.xlsx`);
+    setShowExportMenu(false);
+  };
+
+  const exportToPDF = () => {
+    const doc = new jsPDF('l', 'mm', 'a4'); // landscape orientation
+    
+    // Add title
+    doc.setFontSize(18);
+    doc.setTextColor(40, 40, 40);
+    doc.text('Pay4Me Call History Report', 14, 20);
+    
+    // Add subtitle with date range
+    doc.setFontSize(12);
+    doc.setTextColor(100, 100, 100);
+    doc.text(`Generated on: ${new Date().toLocaleDateString()}`, 14, 30);
+    doc.text(`Total Records: ${filteredRecords.length}`, 14, 38);
+    
+    // Prepare table data
+    const tableData = filteredRecords.map(record => [
+      record.sponsor,
+      record.beneficiary,
+      formatTimestamp(record.timestamp),
+      record.status,
+      `${record.duration}s`
+    ]);
+
+    // Add table
+    doc.autoTable({
+      head: [['Sponsor', 'Beneficiary', 'Timestamp', 'Status', 'Duration']],
+      body: tableData,
+      startY: 45,
+      styles: {
+        fontSize: 9,
+        cellPadding: 3,
+      },
+      headStyles: {
+        fillColor: [59, 130, 246], // Blue color
+        textColor: 255,
+        fontStyle: 'bold'
+      },
+      alternateRowStyles: {
+        fillColor: [248, 250, 252] // Light gray
+      },
+      columnStyles: {
+        0: { cellWidth: 45 }, // Sponsor
+        1: { cellWidth: 45 }, // Beneficiary
+        2: { cellWidth: 55 }, // Timestamp
+        3: { cellWidth: 30 }, // Status
+        4: { cellWidth: 25 }  // Duration
+      }
+    });
+
+    doc.save(`pay4me-call-history-${new Date().toISOString().split('T')[0]}.pdf`);
+    setShowExportMenu(false);
   };
 
   return (
@@ -154,6 +265,43 @@ const CallHistory: React.FC<CallHistoryProps> = ({ onBack }) => {
                     <Filter size={18} />
                     <span>Filter</span>
                   </button>
+                  <div className="relative">
+                    <button 
+                      onClick={() => setShowExportMenu(!showExportMenu)}
+                      className="flex items-center space-x-2 px-4 py-3 bg-blue-600 hover:bg-blue-700 text-white rounded-xl font-medium transition-all duration-200 hover:scale-105"
+                    >
+                      <Download size={18} />
+                      <span>Export</span>
+                    </button>
+                    
+                    {showExportMenu && (
+                      <div className="absolute right-0 mt-2 w-48 bg-white rounded-xl shadow-xl border border-gray-200/50 z-10">
+                        <div className="py-2">
+                          <button
+                            onClick={exportToCSV}
+                            className="w-full text-left px-4 py-3 text-sm text-gray-700 hover:bg-gray-50 flex items-center space-x-3 transition-colors"
+                          >
+                            <File className="w-4 h-4 text-green-600" />
+                            <span>Export as CSV</span>
+                          </button>
+                          <button
+                            onClick={exportToExcel}
+                            className="w-full text-left px-4 py-3 text-sm text-gray-700 hover:bg-gray-50 flex items-center space-x-3 transition-colors"
+                          >
+                            <FileSpreadsheet className="w-4 h-4 text-green-600" />
+                            <span>Export as Excel</span>
+                          </button>
+                          <button
+                            onClick={exportToPDF}
+                            className="w-full text-left px-4 py-3 text-sm text-gray-700 hover:bg-gray-50 flex items-center space-x-3 transition-colors"
+                          >
+                            <FileText className="w-4 h-4 text-red-600" />
+                            <span>Export as PDF</span>
+                          </button>
+                        </div>
+                      </div>
+                    )}
+                  </div>
                 </div>
               </div>
             </div>
@@ -244,6 +392,14 @@ const CallHistory: React.FC<CallHistoryProps> = ({ onBack }) => {
           </div>
         </div>
       </div>
+
+      {/* Click outside to close export menu */}
+      {showExportMenu && (
+        <div 
+          className="fixed inset-0 z-5" 
+          onClick={() => setShowExportMenu(false)}
+        />
+      )}
     </div>
   );
 };
