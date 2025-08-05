@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
-import { ArrowLeft, Shield, ShieldCheck, Plus, Trash2, Search, Filter } from 'lucide-react';
+import { ArrowLeft, Shield, ShieldCheck, Plus, Trash2, Search, Filter, Download, File } from 'lucide-react';
+import { saveAs } from 'file-saver';
 
 interface BeneficiaryListsProps {
   onBack: () => void;
@@ -15,6 +16,7 @@ interface BeneficiaryEntry {
 const BeneficiaryLists: React.FC<BeneficiaryListsProps> = ({ onBack }) => {
   const [activeTab, setActiveTab] = useState<'whitelist' | 'blacklist'>('whitelist');
   const [searchTerm, setSearchTerm] = useState('');
+  const [showExportMenu, setShowExportMenu] = useState(false);
 
   const whitelistData: BeneficiaryEntry[] = [
     { number: '+234707549973', dateAdded: '2025-01-15', addedBy: 'System', status: 'Active' },
@@ -54,6 +56,28 @@ const BeneficiaryLists: React.FC<BeneficiaryListsProps> = ({ onBack }) => {
         ? 'bg-red-500 text-white shadow-lg shadow-red-200' 
         : 'bg-red-50 text-red-600 hover:bg-red-100';
     }
+  };
+
+  const exportToCSV = () => {
+    const headers = ['Phone Number', 'Date Added', 'Added By', 'Status'];
+    const csvContent = [
+      headers.join(','),
+      ...filteredData.map(entry => [
+        entry.number,
+        new Date(entry.dateAdded).toLocaleDateString('en-US', {
+          year: 'numeric',
+          month: 'short',
+          day: 'numeric'
+        }),
+        entry.addedBy,
+        entry.status
+      ].join(','))
+    ].join('\n');
+
+    const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+    const filename = `${activeTab}-entries-${new Date().toISOString().split('T')[0]}.csv`;
+    saveAs(blob, filename);
+    setShowExportMenu(false);
   };
 
   return (
@@ -152,6 +176,29 @@ const BeneficiaryLists: React.FC<BeneficiaryListsProps> = ({ onBack }) => {
                     <Filter size={18} />
                     <span>Filter</span>
                   </button>
+                  <div className="relative">
+                    <button 
+                      onClick={() => setShowExportMenu(!showExportMenu)}
+                      className="flex items-center space-x-2 px-4 py-3 bg-blue-600 hover:bg-blue-700 text-white rounded-xl font-medium transition-all duration-200 hover:scale-105"
+                    >
+                      <Download size={18} />
+                      <span>Export</span>
+                    </button>
+                    
+                    {showExportMenu && (
+                      <div className="absolute right-0 mt-2 w-48 bg-white rounded-xl shadow-xl border border-gray-200/50 z-10">
+                        <div className="py-2">
+                          <button
+                            onClick={exportToCSV}
+                            className="w-full text-left px-4 py-3 text-sm text-gray-700 hover:bg-gray-50 flex items-center space-x-3 transition-colors"
+                          >
+                            <File className="w-4 h-4 text-green-600" />
+                            <span>Export as CSV</span>
+                          </button>
+                        </div>
+                      </div>
+                    )}
+                  </div>
                 </div>
               </div>
             </div>
@@ -258,6 +305,14 @@ const BeneficiaryLists: React.FC<BeneficiaryListsProps> = ({ onBack }) => {
           </div>
         </div>
       </div>
+
+      {/* Click outside to close export menu */}
+      {showExportMenu && (
+        <div 
+          className="fixed inset-0 z-5" 
+          onClick={() => setShowExportMenu(false)}
+        />
+      )}
     </div>
   );
 };

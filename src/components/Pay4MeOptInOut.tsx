@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
-import { ArrowLeft, CheckCircle, XCircle, ToggleLeft, ToggleRight, Shield, Clock, User, AlertTriangle, Search, Filter, History } from 'lucide-react';
+import { ArrowLeft, CheckCircle, XCircle, ToggleLeft, ToggleRight, Shield, Clock, User, AlertTriangle, Search, Filter, History, Download, File } from 'lucide-react';
+import { saveAs } from 'file-saver';
 
 interface OptInOutProps {
   onBack: () => void;
@@ -24,6 +25,7 @@ interface OptInOutRecord {
 
 const OptInOut: React.FC<OptInOutProps> = ({ onBack }) => {
   const [searchTerm, setSearchTerm] = useState('');
+  const [showExportMenu, setShowExportMenu] = useState(false);
   const [serviceStatus, setServiceStatus] = useState<ServiceStatus>({
     isOptedIn: true,
     lastChanged: '2025-01-10T14:30:00',
@@ -127,6 +129,23 @@ const OptInOut: React.FC<OptInOutProps> = ({ onBack }) => {
       month: 'short',
       day: 'numeric'
     });
+  };
+
+  const exportToCSV = () => {
+    const headers = ['Beneficiary', 'Date', 'Status', 'Timestamp'];
+    const csvContent = [
+      headers.join(','),
+      ...filteredHistory.map(record => [
+        record.beneficiary,
+        formatDate(record.date),
+        record.status,
+        formatDateTime(record.timestamp)
+      ].join(','))
+    ].join('\n');
+
+    const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+    saveAs(blob, `pay4me-opt-in-out-history-${new Date().toISOString().split('T')[0]}.csv`);
+    setShowExportMenu(false);
   };
 
   return (
@@ -312,15 +331,40 @@ const OptInOut: React.FC<OptInOutProps> = ({ onBack }) => {
 
               {/* Search */}
               <div className="p-6 border-b border-gray-200/50">
-                <div className="relative">
-                  <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" size={20} />
-                  <input
-                    type="text"
-                    placeholder="Search by beneficiary, status, or date..."
-                    value={searchTerm}
-                    onChange={(e) => setSearchTerm(e.target.value)}
-                    className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200 bg-white/50 backdrop-blur-sm"
-                  />
+                <div className="flex flex-col sm:flex-row gap-4 items-center justify-between">
+                  <div className="flex-1 relative">
+                    <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" size={20} />
+                    <input
+                      type="text"
+                      placeholder="Search by beneficiary, status, or date..."
+                      value={searchTerm}
+                      onChange={(e) => setSearchTerm(e.target.value)}
+                      className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200 bg-white/50 backdrop-blur-sm"
+                    />
+                  </div>
+                  <div className="relative">
+                    <button 
+                      onClick={() => setShowExportMenu(!showExportMenu)}
+                      className="flex items-center space-x-2 px-4 py-3 bg-blue-600 hover:bg-blue-700 text-white rounded-xl font-medium transition-all duration-200 hover:scale-105"
+                    >
+                      <Download size={18} />
+                      <span>Export</span>
+                    </button>
+                    
+                    {showExportMenu && (
+                      <div className="absolute right-0 mt-2 w-48 bg-white rounded-xl shadow-xl border border-gray-200/50 z-10">
+                        <div className="py-2">
+                          <button
+                            onClick={exportToCSV}
+                            className="w-full text-left px-4 py-3 text-sm text-gray-700 hover:bg-gray-50 flex items-center space-x-3 transition-colors"
+                          >
+                            <File className="w-4 h-4 text-green-600" />
+                            <span>Export as CSV</span>
+                          </button>
+                        </div>
+                      </div>
+                    )}
+                  </div>
                 </div>
               </div>
 
@@ -337,9 +381,6 @@ const OptInOut: React.FC<OptInOutProps> = ({ onBack }) => {
                       </th>
                       <th className="px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
                         Status
-                      </th>
-                      <th className="px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
-                        Timestamp
                       </th>
                     </tr>
                   </thead>
@@ -359,9 +400,6 @@ const OptInOut: React.FC<OptInOutProps> = ({ onBack }) => {
                           <span className={`inline-flex px-3 py-1 text-xs font-semibold rounded-full border ${getRecordStatusColor(record.status)}`}>
                             {record.status}
                           </span>
-                        </td>
-                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600">
-                          {formatDateTime(record.timestamp)}
                         </td>
                       </tr>
                     ))}
@@ -451,6 +489,14 @@ const OptInOut: React.FC<OptInOutProps> = ({ onBack }) => {
             </div>
           </div>
         </div>
+      )}
+
+      {/* Click outside to close export menu */}
+      {showExportMenu && (
+        <div 
+          className="fixed inset-0 z-5" 
+          onClick={() => setShowExportMenu(false)}
+        />
       )}
     </div>
   );
