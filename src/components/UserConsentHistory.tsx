@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
-import { ArrowLeft, Search, Filter, UserCheck, Clock, Phone, Hash } from 'lucide-react';
+import { ArrowLeft, Search, Filter, UserCheck, Clock, Phone, Hash, Download, File } from 'lucide-react';
+import { saveAs } from 'file-saver';
 
 interface UserConsentHistoryProps {
   onBack: () => void;
@@ -17,6 +18,7 @@ interface ConsentRecord {
 
 const UserConsentHistory: React.FC<UserConsentHistoryProps> = ({ onBack }) => {
   const [searchTerm, setSearchTerm] = useState('');
+  const [showExportMenu, setShowExportMenu] = useState(false);
 
   const formatTimestamp = (timestamp: string) => {
     const date = new Date(timestamp);
@@ -96,6 +98,26 @@ const UserConsentHistory: React.FC<UserConsentHistoryProps> = ({ onBack }) => {
       default:
         return 'bg-purple-50 text-purple-700 border-purple-200';
     }
+  };
+
+  const exportToCSV = () => {
+    const headers = ['Timestamp', 'Call to Action', 'Key Press', 'Caller Number', 'Session ID', 'Duration (seconds)', 'Consent Type'];
+    const csvContent = [
+      headers.join(','),
+      ...filteredRecords.map(record => [
+        formatTimestamp(record.timestamp),
+        record.callToAction,
+        record.keyPress,
+        record.callerNumber,
+        record.sessionId,
+        record.duration.toString(),
+        `"${record.consentType}"` // Wrap in quotes to handle commas
+      ].join(','))
+    ].join('\n');
+
+    const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+    saveAs(blob, `user-consent-history-${new Date().toISOString().split('T')[0]}.csv`);
+    setShowExportMenu(false);
   };
 
   return (
@@ -229,6 +251,29 @@ const UserConsentHistory: React.FC<UserConsentHistoryProps> = ({ onBack }) => {
                     <Filter size={18} />
                     <span>Filter</span>
                   </button>
+                  <div className="relative">
+                    <button 
+                      onClick={() => setShowExportMenu(!showExportMenu)}
+                      className="flex items-center space-x-2 px-4 py-3 bg-blue-600 hover:bg-blue-700 text-white rounded-xl font-medium transition-all duration-200 hover:scale-105"
+                    >
+                      <Download size={18} />
+                      <span>Export</span>
+                    </button>
+                    
+                    {showExportMenu && (
+                      <div className="absolute right-0 mt-2 w-48 bg-white rounded-xl shadow-xl border border-gray-200/50 z-10">
+                        <div className="py-2">
+                          <button
+                            onClick={exportToCSV}
+                            className="w-full text-left px-4 py-3 text-sm text-gray-700 hover:bg-gray-50 flex items-center space-x-3 transition-colors"
+                          >
+                            <File className="w-4 h-4 text-green-600" />
+                            <span>Export as CSV</span>
+                          </button>
+                        </div>
+                      </div>
+                    )}
+                  </div>
                 </div>
               </div>
             </div>
@@ -336,6 +381,14 @@ const UserConsentHistory: React.FC<UserConsentHistoryProps> = ({ onBack }) => {
           </div>
         </div>
       </div>
+
+      {/* Click outside to close export menu */}
+      {showExportMenu && (
+        <div 
+          className="fixed inset-0 z-5" 
+          onClick={() => setShowExportMenu(false)}
+        />
+      )}
     </div>
   );
 };
