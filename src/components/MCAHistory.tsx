@@ -157,65 +157,6 @@ const MCAHistory: React.FC<MCAHistoryProps> = ({ onBack }) => {
               <p className="text-gray-600">Missed Call Alert transaction history for +234707549973</p>
             </div>
 
-            {/* Summary Cards */}
-            <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
-              <div className="bg-white/70 backdrop-blur-sm rounded-2xl shadow-xl border border-gray-200/50 p-6">
-                <div className="flex items-center space-x-4">
-                  <div className="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center">
-                    <CreditCard className="w-6 h-6 text-green-600" />
-                  </div>
-                  <div>
-                    <p className="text-sm font-medium text-gray-600">Total Successful</p>
-                    <p className="text-2xl font-bold text-gray-900">
-                      {mcaRecords.filter(r => r.status === 'Success').length}
-                    </p>
-                  </div>
-                </div>
-              </div>
-              
-              <div className="bg-white/70 backdrop-blur-sm rounded-2xl shadow-xl border border-gray-200/50 p-6">
-                <div className="flex items-center space-x-4">
-                  <div className="w-12 h-12 bg-red-100 rounded-full flex items-center justify-center">
-                    <CreditCard className="w-6 h-6 text-red-600" />
-                  </div>
-                  <div>
-                    <p className="text-sm font-medium text-gray-600">Failed</p>
-                    <p className="text-2xl font-bold text-gray-900">
-                      {mcaRecords.filter(r => r.status === 'Failed').length}
-                    </p>
-                  </div>
-                </div>
-              </div>
-              
-              <div className="bg-white/70 backdrop-blur-sm rounded-2xl shadow-xl border border-gray-200/50 p-6">
-                <div className="flex items-center space-x-4">
-                  <div className="w-12 h-12 bg-yellow-100 rounded-full flex items-center justify-center">
-                    <CreditCard className="w-6 h-6 text-yellow-600" />
-                  </div>
-                  <div>
-                    <p className="text-sm font-medium text-gray-600">Pending</p>
-                    <p className="text-2xl font-bold text-gray-900">
-                      {mcaRecords.filter(r => r.status === 'Pending').length}
-                    </p>
-                  </div>
-                </div>
-              </div>
-              
-              <div className="bg-white/70 backdrop-blur-sm rounded-2xl shadow-xl border border-gray-200/50 p-6">
-                <div className="flex items-center space-x-4">
-                  <div className="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center">
-                    <CreditCard className="w-6 h-6 text-blue-600" />
-                  </div>
-                  <div>
-                    <p className="text-sm font-medium text-gray-600">Total Amount</p>
-                    <p className="text-2xl font-bold text-gray-900">
-                      {formatAmount(mcaRecords.reduce((sum, r) => r.status === 'Success' ? sum + r.amount : sum, 0), 'NGN')}
-                    </p>
-                  </div>
-                </div>
-              </div>
-            </div>
-
             {/* Search and Filter */}
             <div className="bg-white/70 backdrop-blur-sm rounded-2xl shadow-xl border border-gray-200/50 p-6 mb-6">
               <div className="flex flex-col sm:flex-row gap-4 items-center justify-between">
@@ -285,9 +226,6 @@ const MCAHistory: React.FC<MCAHistoryProps> = ({ onBack }) => {
                         Beneficiary
                       </th>
                       <th className="px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
-                        Amount
-                      </th>
-                      <th className="px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
                         Timestamp
                       </th>
                       <th className="px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
@@ -315,9 +253,6 @@ const MCAHistory: React.FC<MCAHistoryProps> = ({ onBack }) => {
                         </td>
                         <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600">
                           {record.beneficiary}
-                        </td>
-                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900 font-semibold">
-                          {formatAmount(record.amount, record.currency)}
                         </td>
                         <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600">
                           {formatTimestamp(record.timestamp)}
