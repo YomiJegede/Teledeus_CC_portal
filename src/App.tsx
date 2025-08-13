@@ -5,14 +5,12 @@ import ProfileInfo from './components/ProfileInfo';
 import OptInOut from './components/OptInOut';
 import Pay4MeOptInOut from './components/Pay4MeOptInOut';
 import MCAHistory from './components/MCAHistory';
-import UserConsentHistory from './components/UserConsentHistory';
 import { 
   Search, 
   FileText, 
   Phone, 
   CheckCircle,
   CreditCard,
-  UserCheck,
   Menu,
   X,
   User,
@@ -37,7 +35,7 @@ function App() {
     fullName: ''
   });
   const [userProfile, setUserProfile] = useState({ name: '', email: '' });
-  const [currentPage, setCurrentPage] = useState<'home' | 'call-history' | 'beneficiary-lists' | 'profile-info' | 'opt-in-out' | 'pay4me-opt-in-out' | 'mca-history' | 'user-consent-history'>('home');
+  const [currentPage, setCurrentPage] = useState<'home' | 'call-history' | 'beneficiary-lists' | 'profile-info' | 'opt-in-out' | 'pay4me-opt-in-out' | 'mca-history'>('home');
 
   const handleSearch = () => {
     // Search functionality would be implemented here
@@ -136,9 +134,6 @@ function App() {
     setCurrentPage('mca-history');
   };
 
-  const handleUserConsentHistoryClick = () => {
-    setCurrentPage('user-consent-history');
-  };
 
   const handleBackToHome = () => {
     setCurrentPage('home');
@@ -168,9 +163,6 @@ function App() {
     return <MCAHistory onBack={handleBackToHome} />;
   }
 
-  if (currentPage === 'user-consent-history') {
-    return <UserConsentHistory onBack={handleBackToHome} />;
-  }
 
   const serviceCards = [
     {
@@ -191,7 +183,7 @@ function App() {
     },
     {
       icon: CheckCircle,
-      title: 'MCA Opt In/Out',
+      title: 'MCA Opt In/Out History',
       description: 'Enable/Disable',
       color: 'bg-green-50 text-green-600',
       hoverColor: 'hover:bg-green-100',
@@ -199,7 +191,7 @@ function App() {
     },
     {
       icon: Phone,
-      title: 'Pay4Me Opt In/Out',
+      title: 'Pay4Me Opt In/Out History',
       description: 'Enable/Disable Pay4Me service',
       color: 'bg-teal-50 text-teal-600',
       hoverColor: 'hover:bg-teal-100',
@@ -212,14 +204,6 @@ function App() {
       color: 'bg-purple-50 text-purple-600',
       hoverColor: 'hover:bg-purple-100',
       onClick: handleMCAHistoryClick
-    },
-    {
-      icon: UserCheck,
-      title: 'User Consent History',
-      description: 'Consent and authorization logs',
-      color: 'bg-indigo-50 text-indigo-600',
-      hoverColor: 'hover:bg-indigo-100',
-      onClick: handleUserConsentHistoryClick
     }
   ];
 

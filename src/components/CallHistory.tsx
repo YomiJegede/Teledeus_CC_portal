@@ -22,6 +22,7 @@ interface CallRecord {
   timestamp: string;
   status: 'Success' | 'Not Connected';
   duration: number;
+  callToAction: 'Accepted' | 'Declined' | 'No Response';
 }
 
 const CallHistory: React.FC<CallHistoryProps> = ({ onBack }) => {
@@ -42,51 +43,52 @@ const CallHistory: React.FC<CallHistoryProps> = ({ onBack }) => {
   };
 
   const callRecords: CallRecord[] = [
-    { sponsor: '234707549974', beneficiary: '+234707549973', timestamp: '2025-07-24T13:28:17', status: 'Success', duration: 12 },
-    { sponsor: '234707549974', beneficiary: '+234707549973', timestamp: '2025-07-24T13:08:40', status: 'Success', duration: 8 },
-    { sponsor: '200234707549974', beneficiary: '+234707549973', timestamp: '2025-07-18T08:07:46', status: 'Success', duration: 6 },
-    { sponsor: '200234707549974', beneficiary: '+234707549973', timestamp: '2025-07-17T17:18:06', status: 'Success', duration: 6 },
-    { sponsor: '200234707549974', beneficiary: '+234707549973', timestamp: '2025-07-17T17:13:42', status: 'Success', duration: 98 },
-    { sponsor: '200234707549974', beneficiary: '+234707549973', timestamp: '2025-07-17T16:49:24', status: 'Success', duration: 6 },
-    { sponsor: '200234707549974', beneficiary: '+234707549973', timestamp: '2025-07-17T16:08:31', status: 'Success', duration: 19 },
-    { sponsor: '200234707549973', beneficiary: '+234707549973', timestamp: '2025-07-17T14:31:49', status: 'Success', duration: 31 },
-    { sponsor: '200234707549974', beneficiary: '+234707549973', timestamp: '2025-07-17T14:28:28', status: 'Success', duration: 6 },
-    { sponsor: '200234707549974', beneficiary: '+234707549973', timestamp: '2025-07-17T14:26:06', status: 'Success', duration: 51 },
-    { sponsor: '200234707549974', beneficiary: '+234707549973', timestamp: '2025-07-17T14:23:10', status: 'Success', duration: 50 },
-    { sponsor: '200234707549974', beneficiary: '+234707549973', timestamp: '2025-07-17T14:21:49', status: 'Success', duration: 49 },
-    { sponsor: '200234707549974', beneficiary: '+234707549973', timestamp: '2025-07-17T14:20:32', status: 'Not Connected', duration: 0 },
-    { sponsor: '200234707549974', beneficiary: '+234707549973', timestamp: '2025-07-17T14:18:43', status: 'Success', duration: 34 },
-    { sponsor: '200234707549973', beneficiary: '+234707549973', timestamp: '2025-07-17T14:14:12', status: 'Success', duration: 11 },
-    { sponsor: '200234707549974', beneficiary: '+234707549973', timestamp: '2025-07-07T13:13:38', status: 'Success', duration: 6 },
-    { sponsor: '200234707549974', beneficiary: '+234707549973', timestamp: '2025-07-07T13:09:14', status: 'Success', duration: 39 },
-    { sponsor: '200234707549974', beneficiary: '+234707549973', timestamp: '2025-07-07T13:05:58', status: 'Success', duration: 26 },
-    { sponsor: '200234707549974', beneficiary: '+234707549973', timestamp: '2025-07-07T13:02:34', status: 'Success', duration: 23 },
-    { sponsor: '200234707549974', beneficiary: '+234707549973', timestamp: '2025-07-04T14:17:17', status: 'Success', duration: 6 },
-    { sponsor: '200234707549974', beneficiary: '+234707549973', timestamp: '2025-07-04T14:16:09', status: 'Success', duration: 6 },
-    { sponsor: '200234707549974', beneficiary: '+234707549973', timestamp: '2025-07-04T14:14:48', status: 'Success', duration: 6 },
-    { sponsor: '200234707549974', beneficiary: '+234707549973', timestamp: '2025-07-04T14:12:17', status: 'Success', duration: 58 },
-    { sponsor: '200234707549974', beneficiary: '+234707549973', timestamp: '2025-07-02T16:35:57', status: 'Success', duration: 27 },
-    { sponsor: '200234707549974', beneficiary: '+234707549973', timestamp: '2025-07-02T16:35:32', status: 'Not Connected', duration: 0 },
-    { sponsor: '200234707549974', beneficiary: '+234707549973', timestamp: '2025-07-02T14:07:31', status: 'Not Connected', duration: 0 },
-    { sponsor: '200234707549972', beneficiary: '+234707549973', timestamp: '2025-07-01T10:14:17', status: 'Success', duration: 6 },
-    { sponsor: '200234707549972', beneficiary: '+234707549973', timestamp: '2025-07-01T10:13:12', status: 'Success', duration: 6 },
-    { sponsor: '200234707549972', beneficiary: '+234707549973', timestamp: '2025-07-01T10:08:08', status: 'Success', duration: 6 },
-    { sponsor: '200234707549972', beneficiary: '+234707549973', timestamp: '2025-07-01T10:06:51', status: 'Success', duration: 30 },
-    { sponsor: '200234707549972', beneficiary: '+234707549973', timestamp: '2025-07-01T10:06:20', status: 'Not Connected', duration: 0 },
-    { sponsor: '200234707549972', beneficiary: '+234707549973', timestamp: '2025-06-27T12:11:25', status: 'Success', duration: 5 },
-    { sponsor: '200234707549972', beneficiary: '+234707549973', timestamp: '2025-06-27T12:10:07', status: 'Success', duration: 5 },
-    { sponsor: '200234707549972', beneficiary: '+234707549973', timestamp: '2025-06-27T12:08:42', status: 'Not Connected', duration: 0 },
-    { sponsor: '200234707549972', beneficiary: '+234707549973', timestamp: '2025-06-27T11:36:49', status: 'Success', duration: 70 },
-    { sponsor: '200234707549972', beneficiary: '+234707549973', timestamp: '2025-06-27T11:32:33', status: 'Not Connected', duration: 0 },
-    { sponsor: '200234707549972', beneficiary: '+234707549973', timestamp: '2025-06-27T11:30:54', status: 'Not Connected', duration: 0 },
-    { sponsor: '200234707549972', beneficiary: '+234707549973', timestamp: '2025-06-27T11:23:34', status: 'Success', duration: 45 },
-    { sponsor: '200234707549972', beneficiary: '+234707549973', timestamp: '2025-06-27T11:16:28', status: 'Success', duration: 40 }
+    { sponsor: '234707549974', beneficiary: '+234707549973', timestamp: '2025-07-24T13:28:17', status: 'Success', duration: 12, callToAction: 'Accepted' },
+    { sponsor: '234707549974', beneficiary: '+234707549973', timestamp: '2025-07-24T13:08:40', status: 'Success', duration: 8, callToAction: 'Accepted' },
+    { sponsor: '200234707549974', beneficiary: '+234707549973', timestamp: '2025-07-18T08:07:46', status: 'Success', duration: 6, callToAction: 'Accepted' },
+    { sponsor: '200234707549974', beneficiary: '+234707549973', timestamp: '2025-07-17T17:18:06', status: 'Success', duration: 6, callToAction: 'Accepted' },
+    { sponsor: '200234707549974', beneficiary: '+234707549973', timestamp: '2025-07-17T17:13:42', status: 'Success', duration: 98, callToAction: 'Accepted' },
+    { sponsor: '200234707549974', beneficiary: '+234707549973', timestamp: '2025-07-17T16:49:24', status: 'Success', duration: 6, callToAction: 'Accepted' },
+    { sponsor: '200234707549974', beneficiary: '+234707549973', timestamp: '2025-07-17T16:08:31', status: 'Success', duration: 19, callToAction: 'Accepted' },
+    { sponsor: '200234707549973', beneficiary: '+234707549973', timestamp: '2025-07-17T14:31:49', status: 'Success', duration: 31, callToAction: 'Accepted' },
+    { sponsor: '200234707549974', beneficiary: '+234707549973', timestamp: '2025-07-17T14:28:28', status: 'Success', duration: 6, callToAction: 'Accepted' },
+    { sponsor: '200234707549974', beneficiary: '+234707549973', timestamp: '2025-07-17T14:26:06', status: 'Success', duration: 51, callToAction: 'Accepted' },
+    { sponsor: '200234707549974', beneficiary: '+234707549973', timestamp: '2025-07-17T14:23:10', status: 'Success', duration: 50, callToAction: 'Accepted' },
+    { sponsor: '200234707549974', beneficiary: '+234707549973', timestamp: '2025-07-17T14:21:49', status: 'Success', duration: 49, callToAction: 'Accepted' },
+    { sponsor: '200234707549974', beneficiary: '+234707549973', timestamp: '2025-07-17T14:20:32', status: 'Not Connected', duration: 0, callToAction: 'No Response' },
+    { sponsor: '200234707549974', beneficiary: '+234707549973', timestamp: '2025-07-17T14:18:43', status: 'Success', duration: 34, callToAction: 'Accepted' },
+    { sponsor: '200234707549973', beneficiary: '+234707549973', timestamp: '2025-07-17T14:14:12', status: 'Success', duration: 11, callToAction: 'Accepted' },
+    { sponsor: '200234707549974', beneficiary: '+234707549973', timestamp: '2025-07-07T13:13:38', status: 'Success', duration: 6, callToAction: 'Accepted' },
+    { sponsor: '200234707549974', beneficiary: '+234707549973', timestamp: '2025-07-07T13:09:14', status: 'Success', duration: 39, callToAction: 'Accepted' },
+    { sponsor: '200234707549974', beneficiary: '+234707549973', timestamp: '2025-07-07T13:05:58', status: 'Success', duration: 26, callToAction: 'Accepted' },
+    { sponsor: '200234707549974', beneficiary: '+234707549973', timestamp: '2025-07-07T13:02:34', status: 'Success', duration: 23, callToAction: 'Accepted' },
+    { sponsor: '200234707549974', beneficiary: '+234707549973', timestamp: '2025-07-04T14:17:17', status: 'Success', duration: 6, callToAction: 'Accepted' },
+    { sponsor: '200234707549974', beneficiary: '+234707549973', timestamp: '2025-07-04T14:16:09', status: 'Success', duration: 6, callToAction: 'Accepted' },
+    { sponsor: '200234707549974', beneficiary: '+234707549973', timestamp: '2025-07-04T14:14:48', status: 'Success', duration: 6, callToAction: 'Accepted' },
+    { sponsor: '200234707549974', beneficiary: '+234707549973', timestamp: '2025-07-04T14:12:17', status: 'Success', duration: 58, callToAction: 'Accepted' },
+    { sponsor: '200234707549974', beneficiary: '+234707549973', timestamp: '2025-07-02T16:35:57', status: 'Success', duration: 27, callToAction: 'Accepted' },
+    { sponsor: '200234707549974', beneficiary: '+234707549973', timestamp: '2025-07-02T16:35:32', status: 'Not Connected', duration: 0, callToAction: 'No Response' },
+    { sponsor: '200234707549974', beneficiary: '+234707549973', timestamp: '2025-07-02T14:07:31', status: 'Not Connected', duration: 0, callToAction: 'Declined' },
+    { sponsor: '200234707549972', beneficiary: '+234707549973', timestamp: '2025-07-01T10:14:17', status: 'Success', duration: 6, callToAction: 'Accepted' },
+    { sponsor: '200234707549972', beneficiary: '+234707549973', timestamp: '2025-07-01T10:13:12', status: 'Success', duration: 6, callToAction: 'Accepted' },
+    { sponsor: '200234707549972', beneficiary: '+234707549973', timestamp: '2025-07-01T10:08:08', status: 'Success', duration: 6, callToAction: 'Accepted' },
+    { sponsor: '200234707549972', beneficiary: '+234707549973', timestamp: '2025-07-01T10:06:51', status: 'Success', duration: 30, callToAction: 'Accepted' },
+    { sponsor: '200234707549972', beneficiary: '+234707549973', timestamp: '2025-07-01T10:06:20', status: 'Not Connected', duration: 0, callToAction: 'No Response' },
+    { sponsor: '200234707549972', beneficiary: '+234707549973', timestamp: '2025-06-27T12:11:25', status: 'Success', duration: 5, callToAction: 'Accepted' },
+    { sponsor: '200234707549972', beneficiary: '+234707549973', timestamp: '2025-06-27T12:10:07', status: 'Success', duration: 5, callToAction: 'Accepted' },
+    { sponsor: '200234707549972', beneficiary: '+234707549973', timestamp: '2025-06-27T12:08:42', status: 'Not Connected', duration: 0, callToAction: 'No Response' },
+    { sponsor: '200234707549972', beneficiary: '+234707549973', timestamp: '2025-06-27T11:36:49', status: 'Success', duration: 70, callToAction: 'Accepted' },
+    { sponsor: '200234707549972', beneficiary: '+234707549973', timestamp: '2025-06-27T11:32:33', status: 'Not Connected', duration: 0, callToAction: 'Declined' },
+    { sponsor: '200234707549972', beneficiary: '+234707549973', timestamp: '2025-06-27T11:30:54', status: 'Not Connected', duration: 0, callToAction: 'No Response' },
+    { sponsor: '200234707549972', beneficiary: '+234707549973', timestamp: '2025-06-27T11:23:34', status: 'Success', duration: 45, callToAction: 'Accepted' },
+    { sponsor: '200234707549972', beneficiary: '+234707549973', timestamp: '2025-06-27T11:16:28', status: 'Success', duration: 40, callToAction: 'Accepted' }
   ];
 
   const filteredRecords = callRecords.filter(record =>
     record.sponsor.toLowerCase().includes(searchTerm.toLowerCase()) ||
     record.beneficiary.toLowerCase().includes(searchTerm.toLowerCase()) ||
     record.status.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    record.callToAction.toLowerCase().includes(searchTerm.toLowerCase()) ||
     formatTimestamp(record.timestamp).toLowerCase().includes(searchTerm.toLowerCase())
   );
 
@@ -94,8 +96,20 @@ const CallHistory: React.FC<CallHistoryProps> = ({ onBack }) => {
     return status === 'Success' ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800';
   };
 
+  const getCallToActionColor = (action: string) => {
+    switch (action) {
+      case 'Accepted':
+        return 'bg-green-100 text-green-800 border-green-200';
+      case 'Declined':
+        return 'bg-red-100 text-red-800 border-red-200';
+      case 'No Response':
+        return 'bg-gray-100 text-gray-600 border-gray-200';
+      default:
+        return 'bg-gray-100 text-gray-600 border-gray-200';
+    }
+  };
   const exportToCSV = () => {
-    const headers = ['Sponsor', 'Beneficiary', 'Timestamp', 'Status', 'Duration (seconds)'];
+    const headers = ['Sponsor', 'Beneficiary', 'Timestamp', 'Status', 'Duration (seconds)', 'Call to Action'];
     const csvContent = [
       headers.join(','),
       ...filteredRecords.map(record => [
@@ -103,7 +117,8 @@ const CallHistory: React.FC<CallHistoryProps> = ({ onBack }) => {
         record.beneficiary,
         formatTimestamp(record.timestamp),
         record.status,
-        record.duration.toString()
+        record.duration.toString(),
+        record.callToAction
       ].join(','))
     ].join('\n');
 
@@ -119,7 +134,8 @@ const CallHistory: React.FC<CallHistoryProps> = ({ onBack }) => {
         'Beneficiary': record.beneficiary,
         'Timestamp': formatTimestamp(record.timestamp),
         'Status': record.status,
-        'Duration (seconds)': record.duration
+        'Duration (seconds)': record.duration,
+        'Call to Action': record.callToAction
       }))
     );
 
@@ -132,7 +148,8 @@ const CallHistory: React.FC<CallHistoryProps> = ({ onBack }) => {
       { wch: 20 }, // Beneficiary
       { wch: 25 }, // Timestamp
       { wch: 15 }, // Status
-      { wch: 18 }  // Duration
+      { wch: 18 }, // Duration
+      { wch: 15 }  // Call to Action
     ];
     worksheet['!cols'] = colWidths;
 
@@ -160,12 +177,13 @@ const CallHistory: React.FC<CallHistoryProps> = ({ onBack }) => {
       record.beneficiary,
       formatTimestamp(record.timestamp),
       record.status,
-      `${record.duration}s`
+      `${record.duration}s`,
+      record.callToAction
     ]);
 
     // Add table
     doc.autoTable({
-      head: [['Sponsor', 'Beneficiary', 'Timestamp', 'Status', 'Duration']],
+      head: [['Sponsor', 'Beneficiary', 'Timestamp', 'Status', 'Duration', 'Call to Action']],
       body: tableData,
       startY: 45,
       styles: {
@@ -181,11 +199,12 @@ const CallHistory: React.FC<CallHistoryProps> = ({ onBack }) => {
         fillColor: [248, 250, 252] // Light gray
       },
       columnStyles: {
-        0: { cellWidth: 45 }, // Sponsor
-        1: { cellWidth: 45 }, // Beneficiary
-        2: { cellWidth: 55 }, // Timestamp
-        3: { cellWidth: 30 }, // Status
-        4: { cellWidth: 25 }  // Duration
+        0: { cellWidth: 35 }, // Sponsor
+        1: { cellWidth: 35 }, // Beneficiary
+        2: { cellWidth: 45 }, // Timestamp
+        3: { cellWidth: 25 }, // Status
+        4: { cellWidth: 20 }, // Duration
+        5: { cellWidth: 30 }  // Call to Action
       }
     });
 
@@ -363,6 +382,9 @@ const CallHistory: React.FC<CallHistoryProps> = ({ onBack }) => {
                           {record.status}
                         </span>
                       </td>
+                      <th className="px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
+                        Call to Action
+                      </th>
                       <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600">
                         {record.duration}s
                       </td>
@@ -372,6 +394,11 @@ const CallHistory: React.FC<CallHistoryProps> = ({ onBack }) => {
               </table>
             </div>
 
+                        <td className="px-6 py-4 whitespace-nowrap">
+                          <span className={`inline-flex px-3 py-1 text-xs font-semibold rounded-full border ${getCallToActionColor(record.callToAction)}`}>
+                            {record.callToAction}
+                          </span>
+                        </td>
             {filteredRecords.length === 0 && (
               <div className="text-center py-12">
                 <div className="text-gray-400 mb-4">

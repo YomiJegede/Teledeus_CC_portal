@@ -9,7 +9,6 @@ interface BeneficiaryListsProps {
 interface BeneficiaryEntry {
   number: string;
   dateAdded: string;
-  addedBy: string;
   status: 'Active' | 'Inactive';
 }
 
@@ -19,25 +18,24 @@ const BeneficiaryLists: React.FC<BeneficiaryListsProps> = ({ onBack }) => {
   const [showExportMenu, setShowExportMenu] = useState(false);
 
   const whitelistData: BeneficiaryEntry[] = [
-    { number: '+234707549973', dateAdded: '2025-01-15', addedBy: 'System', status: 'Active' },
-    { number: '+234801234567', dateAdded: '2025-01-14', addedBy: 'Admin', status: 'Active' },
-    { number: '+234809876543', dateAdded: '2025-01-13', addedBy: 'User', status: 'Active' },
-    { number: '+234703456789', dateAdded: '2025-01-12', addedBy: 'System', status: 'Inactive' },
-    { number: '+234812345678', dateAdded: '2025-01-11', addedBy: 'Admin', status: 'Active' },
-    { number: '+234706789012', dateAdded: '2025-01-10', addedBy: 'User', status: 'Active' },
+    { number: '+234707549973', dateAdded: '2025-01-15', status: 'Active' },
+    { number: '+234801234567', dateAdded: '2025-01-14', status: 'Active' },
+    { number: '+234809876543', dateAdded: '2025-01-13', status: 'Active' },
+    { number: '+234703456789', dateAdded: '2025-01-12', status: 'Inactive' },
+    { number: '+234812345678', dateAdded: '2025-01-11', status: 'Active' },
+    { number: '+234706789012', dateAdded: '2025-01-10', status: 'Active' },
   ];
 
   const blacklistData: BeneficiaryEntry[] = [
-    { number: '+234700000001', dateAdded: '2025-01-14', addedBy: 'Security', status: 'Active' },
-    { number: '+234700000002', dateAdded: '2025-01-13', addedBy: 'Admin', status: 'Active' },
-    { number: '+234700000003', dateAdded: '2025-01-12', addedBy: 'System', status: 'Active' },
-    { number: '+234700000004', dateAdded: '2025-01-11', addedBy: 'Security', status: 'Inactive' },
+    { number: '+234700000001', dateAdded: '2025-01-14', status: 'Active' },
+    { number: '+234700000002', dateAdded: '2025-01-13', status: 'Active' },
+    { number: '+234700000003', dateAdded: '2025-01-12', status: 'Active' },
+    { number: '+234700000004', dateAdded: '2025-01-11', status: 'Inactive' },
   ];
 
   const currentData = activeTab === 'whitelist' ? whitelistData : blacklistData;
   const filteredData = currentData.filter(entry =>
-    entry.number.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    entry.addedBy.toLowerCase().includes(searchTerm.toLowerCase())
+    entry.number.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
   const getStatusColor = (status: string) => {
@@ -59,7 +57,7 @@ const BeneficiaryLists: React.FC<BeneficiaryListsProps> = ({ onBack }) => {
   };
 
   const exportToCSV = () => {
-    const headers = ['Phone Number', 'Date Added', 'Added By', 'Status'];
+    const headers = ['Phone Number', 'Date Added', 'Status'];
     const csvContent = [
       headers.join(','),
       ...filteredData.map(entry => [
@@ -69,7 +67,6 @@ const BeneficiaryLists: React.FC<BeneficiaryListsProps> = ({ onBack }) => {
           month: 'short',
           day: 'numeric'
         }),
-        entry.addedBy,
         entry.status
       ].join(','))
     ].join('\n');
@@ -165,7 +162,7 @@ const BeneficiaryLists: React.FC<BeneficiaryListsProps> = ({ onBack }) => {
                   <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" size={20} />
                   <input
                     type="text"
-                    placeholder="Search by number or added by..."
+                    placeholder="Search by number..."
                     value={searchTerm}
                     onChange={(e) => setSearchTerm(e.target.value)}
                     className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200 bg-white/50 backdrop-blur-sm"
@@ -235,13 +232,7 @@ const BeneficiaryLists: React.FC<BeneficiaryListsProps> = ({ onBack }) => {
                         Date Added
                       </th>
                       <th className="px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
-                        Added By
-                      </th>
-                      <th className="px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
                         Status
-                      </th>
-                      <th className="px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
-                        Actions
                       </th>
                     </tr>
                   </thead>
@@ -264,20 +255,10 @@ const BeneficiaryLists: React.FC<BeneficiaryListsProps> = ({ onBack }) => {
                             day: 'numeric'
                           })}
                         </td>
-                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600">
-                          <span className="bg-gray-100 px-2 py-1 rounded-full text-xs font-medium">
-                            {entry.addedBy}
-                          </span>
-                        </td>
                         <td className="px-6 py-4 whitespace-nowrap">
                           <span className={`inline-flex px-3 py-1 text-xs font-semibold rounded-full border ${getStatusColor(entry.status)}`}>
                             {entry.status}
                           </span>
-                        </td>
-                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                          <button className="text-red-500 hover:text-red-700 transition-colors hover:scale-110 transform duration-200">
-                            <Trash2 size={16} />
-                          </button>
                         </td>
                       </tr>
                     ))}

@@ -200,7 +200,7 @@ const OptInOut: React.FC<OptInOutProps> = ({ onBack }) => {
           <div className="max-w-4xl mx-auto">
             {/* Page Header */}
             <div className="mb-8">
-              <h1 className="text-3xl font-bold text-gray-900 mb-2">Service Opt In/Out</h1>
+              <h1 className="text-3xl font-bold text-gray-900 mb-2">MCA Opt In/Out History</h1>
               <p className="text-gray-600">Manage your Teledeus collect call service status for +234707549973</p>
             </div>
 
