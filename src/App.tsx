@@ -168,7 +168,7 @@ function App() {
     {
       icon: FileText,
       title: 'Beneficiary Lists',
-      description: 'View white/blacklist entries',
+      description: 'View whitelist/blacklist entries',
       color: 'bg-blue-50 text-blue-600',
       hoverColor: 'hover:bg-blue-100',
       onClick: handleBeneficiaryListsClick
@@ -183,16 +183,14 @@ function App() {
     },
     {
       icon: CheckCircle,
-      title: 'MCA Opt In/Out History',
-      description: 'Enable/Disable',
+      title: 'MCA Subscription History',
       color: 'bg-green-50 text-green-600',
       hoverColor: 'hover:bg-green-100',
       onClick: handleOptInOutClick
     },
     {
       icon: Phone,
-      title: 'Pay4Me Opt In/Out History',
-      description: 'Enable/Disable Pay4Me service',
+      title: 'Pay4Me Subscription History',
       color: 'bg-teal-50 text-teal-600',
       hoverColor: 'hover:bg-teal-100',
       onClick: handlePay4MeOptInOutClick
@@ -200,7 +198,6 @@ function App() {
     {
       icon: CreditCard,
       title: 'Missed Call Alert History',
-      description: 'Missed Call Alert logs',
       color: 'bg-purple-50 text-purple-600',
       hoverColor: 'hover:bg-purple-100',
       onClick: handleMCAHistoryClick
