@@ -357,6 +357,9 @@ const CallHistory: React.FC<CallHistoryProps> = ({ onBack }) => {
                     <th className="px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
                       Duration
                     </th>
+                    <th className="px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
+                      Call to Action
+                    </th>
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-gray-200/50">
@@ -382,11 +385,13 @@ const CallHistory: React.FC<CallHistoryProps> = ({ onBack }) => {
                           {record.status}
                         </span>
                       </td>
-                      <th className="px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
-                        Call to Action
-                      </th>
                       <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600">
                         {record.duration}s
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap">
+                        <span className={`inline-flex px-3 py-1 text-xs font-semibold rounded-full border ${getCallToActionColor(record.callToAction)}`}>
+                          {record.callToAction}
+                        </span>
                       </td>
                     </tr>
                   ))}
@@ -394,11 +399,6 @@ const CallHistory: React.FC<CallHistoryProps> = ({ onBack }) => {
               </table>
             </div>
 
-                        <td className="px-6 py-4 whitespace-nowrap">
-                          <span className={`inline-flex px-3 py-1 text-xs font-semibold rounded-full border ${getCallToActionColor(record.callToAction)}`}>
-                            {record.callToAction}
-                          </span>
-                        </td>
             {filteredRecords.length === 0 && (
               <div className="text-center py-12">
                 <div className="text-gray-400 mb-4">
