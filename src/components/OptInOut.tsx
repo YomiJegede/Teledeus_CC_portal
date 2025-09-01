@@ -237,49 +237,6 @@ const OptInOut: React.FC<OptInOutProps> = ({ onBack }) => {
               </div>
             </div>
 
-            {/* Action Buttons */}
-            <div className="bg-white/70 backdrop-blur-sm rounded-2xl shadow-xl border border-gray-200/50 p-8 mb-8">
-              <h3 className="text-xl font-semibold text-gray-900 mb-6 flex items-center">
-                <ToggleRight className="w-6 h-6 mr-2 text-blue-500" />
-                Service Control
-              </h3>
-              
-              {isChanging ? (
-                <div className="text-center py-8">
-                  <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto mb-4"></div>
-                  <p className="text-gray-600">Updating service status...</p>
-                </div>
-              ) : (
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-                  <button
-                    onClick={() => handleToggleService('opt-in')}
-                    disabled={serviceStatus.isOptedIn}
-                    className={`flex items-center justify-center space-x-3 p-6 rounded-xl font-semibold transition-all duration-200 ${
-                      serviceStatus.isOptedIn
-                        ? 'bg-gray-100 text-gray-400 cursor-not-allowed'
-                        : 'bg-green-50 hover:bg-green-100 text-green-600 hover:scale-105 shadow-lg hover:shadow-xl'
-                    }`}
-                  >
-                    <CheckCircle size={24} />
-                    <span>Opt In to Service</span>
-                  </button>
-                  
-                  <button
-                    onClick={() => handleToggleService('opt-out')}
-                    disabled={!serviceStatus.isOptedIn}
-                    className={`flex items-center justify-center space-x-3 p-6 rounded-xl font-semibold transition-all duration-200 ${
-                      !serviceStatus.isOptedIn
-                        ? 'bg-gray-100 text-gray-400 cursor-not-allowed'
-                        : 'bg-red-50 hover:bg-red-100 text-red-600 hover:scale-105 shadow-lg hover:shadow-xl'
-                    }`}
-                  >
-                    <XCircle size={24} />
-                    <span>Opt Out of Service</span>
-                  </button>
-                </div>
-              )}
-            </div>
-
             {/* Statistics */}
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
               <div className="bg-white/70 backdrop-blur-sm rounded-2xl shadow-xl border border-gray-200/50 p-6">
